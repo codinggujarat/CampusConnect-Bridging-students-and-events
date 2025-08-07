@@ -1,0 +1,11 @@
+Flask
+Flask-SQLAlchemy
+Flask-Mail
+qrcode
+pillow
+pandas
+openpyxl
+razorpay
+Flask
+Flask-SQLAlchemy
+razorpay

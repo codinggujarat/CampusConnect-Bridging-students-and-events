@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/static/css/style.css">
+  <title>Event Registration</title>
+</head>
+
+<body>
+  <div class="form-container">
+    <div class="form-box">
+      <h2>Student Event Registration</h2>
+      <form method="POST" action="/pay">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <select name="semester" required>
+          <option value="">Select Semester</option>
+          <option value="1">Sem 1</option>
+          <option value="2">Sem 2</option>
+          <option value="3">Sem 3</option>
+          <option value="4">Sem 4</option>
+          <option value="5">Sem 5</option>
+          <option value="6">Sem 6</option>
+        </select>
+        <button type="submit">Register</button>
+      </form>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+      <p class="flash-message">{{ message }}</p>
+      {% endfor %}
+      {% endwith %}
+    </div>
+  </div>
+</body>
+
+</html>

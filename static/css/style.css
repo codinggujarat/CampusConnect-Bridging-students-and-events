@@ -1,0 +1,92 @@
+/* Reset default styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* White page background */
+body {
+    background: #ffffff;
+}
+
+/* Center container */
+.form-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Form box with #4553e7 background */
+.form-box {
+    background: #4553e7;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    width: 100%;
+    color: #ffffff;
+}
+
+.form-box h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Inputs and select */
+.form-box input,
+.form-box select {
+    width: 100%;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Ensure text color inside inputs is dark */
+.form-box input::placeholder,
+.form-box select {
+    color: #333;
+}
+
+/* Submit button */
+.form-box button {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffffff;
+    color: #4553e7;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.form-box button:hover {
+    background-color: #e6e6e6;
+}
+
+/* Flash message */
+.flash-message {
+    margin-top: 15px;
+    color: #d4ffd4;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .form-box {
+        padding: 25px 20px;
+    }
+
+    .form-box h2 {
+        font-size: 20px;
+    }
+}

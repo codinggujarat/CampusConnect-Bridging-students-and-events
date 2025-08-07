@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>QR Code Attendance Scanner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .scanner-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .scanner-box {
+      background-color: #4553e7;
+      color: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .scanner-box h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    #reader {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #d1ffd1;
+    }
+
+    @media (max-width: 480px) {
+      .scanner-box {
+        padding: 25px 20px;
+      }
+
+      .scanner-box h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scanner-container">
+    <div class="scanner-box">
+      <h2>📷 Scan Student QR Code</h2>
+      <div id="reader"></div>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    function onScanSuccess(qrMessage) {
+      // Redirect to the verification route with UID
+      window.location.href = `/verify/${qrMessage}`;
+    }
+
+    function onScanError(errorMessage) {
+      // Handle scan errors
+      console.warn(`QR Scan Error: ${errorMessage}`);
+    }
+
+    let scanner = new Html5QrcodeScanner("reader", {
+      fps: 10,
+      qrbox: 250
+    });
+
+    scanner.render(onScanSuccess, onScanError);
+  </script>
+</body>
+
+</html>

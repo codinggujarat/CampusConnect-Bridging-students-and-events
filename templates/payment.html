@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pay with Razorpay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .payment-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .payment-box {
+            background-color: #4553e7;
+            color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .payment-box h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        #rzp-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #ffffff;
+            color: #4553e7;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        #rzp-button:hover {
+            background-color: #e6e6e6;
+        }
+
+        @media (max-width: 480px) {
+            .payment-box {
+                padding: 25px 20px;
+            }
+
+            .payment-box h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="payment-container">
+        <div class="payment-box">
+            <h2>Pay ₹100 to Join the Event</h2>
+            <button id="rzp-button">Pay Now</button>
+        </div>
+    </div>
+
+    <form id="payment-success-form" action="/payment-success" method="POST" style="display: none;">
+        <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+    </form>
+
+    <script>
+        var options = {
+            "key": "{{ razorpay_key }}",
+            "amount": "{{ amount * 100 }}",
+            "currency": "INR",
+            "name": "Student Event",
+            "description": "Semester Event Registration",
+            "order_id": "{{ order_id }}",
+            "handler": function (response) {
+                document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+                document.getElementById('payment-success-form').submit();
+            }
+        };
+        var rzp = new Razorpay(options);
+        document.getElementById('rzp-button').onclick = function (e) {
+            rzp.open();
+            e.preventDefault();
+        };
+    </script>
+</body>
+
+</html>
