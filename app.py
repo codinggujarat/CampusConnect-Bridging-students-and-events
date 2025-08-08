@@ -31,20 +31,25 @@ class Student(db.Model):
     email = db.Column(db.String(100))
     semester = db.Column(db.Integer)
     attended = db.Column(db.Boolean, default=False)
+        # New payment details
+    upi_id = db.Column(db.String(100))
+    transaction_id = db.Column(db.String(100))
+    payment_status = db.Column(db.String(50))
+
 
 # ----------------------------- CSV Helpers -----------------------------
 CSV_PATH = os.path.join('static', 'csv_exports', 'registrations.csv')
 os.makedirs(os.path.dirname(CSV_PATH), exist_ok=True)
 
-def append_to_csv(name, email, semester, unique_id, paid=False):
+def append_to_csv(name, email, semester, unique_id, paid=False, upi_id=None):
     file_exists = os.path.isfile(CSV_PATH)
     with open(CSV_PATH, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         if not file_exists:
             writer.writerow(['Name', 'Email', 'Semester', 'Event ID', 'Payment Status', 'Paid via', 'Amount', 'UPI ID', 'Attendance'])
 
-        if semester in [2, 3, 4, 5, 6] or paid:
-            writer.writerow([name, email, semester, unique_id, 'Confirmed', 'Razorpay', '₹100', 'yourupi@bankname', 'Not Marked'])
+        if paid:
+            writer.writerow([name, email, semester, unique_id, 'Paid', 'Razorpay', '₹100', upi_id, 'Not Marked'])
         else:
             writer.writerow([name, email, semester, unique_id, '-', '-', '-', '-', 'Not Marked'])
 
@@ -110,17 +115,30 @@ def payment_success():
         flash("Session expired. Please register again.", "error")
         return redirect(url_for('home'))
 
-    student = Student(**data)
+    # Retrieve payment details from Razorpay POST data
+    razorpay_payment_id = request.form.get('razorpay_payment_id')
+    upi_id = request.form.get('upi_id')  # Only if you collect it from the form or webhook
+    payment_status = "Paid"
+
+    student = Student(
+        **data,
+        transaction_id=razorpay_payment_id,
+        upi_id=upi_id if upi_id else "N/A",
+        payment_status=payment_status
+    )
     db.session.add(student)
     db.session.commit()
     session.pop('registration')
 
     generate_qr_code(student.unique_id)
-    generate_pdf(student.name, student.email, student.semester, student.unique_id, paid=True)
-    append_to_csv(student.name, student.email, student.semester, student.unique_id, paid=True)
+    generate_pdf(student.name, student.email, student.semester, student.unique_id, paid=True,
+                 upi_id=student.upi_id, transaction_id=student.transaction_id)
+    append_to_csv(student.name, student.email, student.semester, student.unique_id, paid=True,
+                  upi_id=student.upi_id)
 
     flash("Payment successful! Download your QR and PDF below.", "success")
     return redirect(url_for('download_all', uid=student.unique_id))
+
 
 # ----------------------------- QR / PDF -----------------------------
 def generate_qr_code(uid):
@@ -130,7 +148,7 @@ def generate_qr_code(uid):
     img = qrcode.make(f'{uid}')
     img.save(path)
 
-def generate_pdf(name, email, semester, uid, paid=False):
+def generate_pdf(name, email, semester, uid, paid=False, upi_id=None, transaction_id=None):
     folder = os.path.join('static', 'pdfs')
     os.makedirs(folder, exist_ok=True)
     filepath = os.path.join(folder, f'{uid}.pdf')
@@ -148,11 +166,12 @@ def generate_pdf(name, email, semester, uid, paid=False):
     flowables.append(Paragraph(f"Event ID: {uid}", styles['Normal']))
     flowables.append(Spacer(1, 12))
 
-    if semester in [2, 3, 4, 5, 6] or paid:
-        flowables.append(Paragraph("✅ Payment Status: Confirmed", styles['Normal']))
+    if paid:
+        flowables.append(Paragraph("✅ Payment Status: Paid", styles['Normal']))
         flowables.append(Paragraph("💳 Paid via: Razorpay", styles['Normal']))
+        flowables.append(Paragraph(f"📌 Transaction ID: {transaction_id}", styles['Normal']))
+        flowables.append(Paragraph(f"🆔 UPI ID: {upi_id}", styles['Normal']))
         flowables.append(Paragraph("📌 Amount: ₹100", styles['Normal']))
-        flowables.append(Paragraph("🆔 UPI ID: yourupi@bankname", styles['Normal']))
         flowables.append(Spacer(1, 12))
 
     flowables.append(Paragraph("Scan this QR to verify entry:", styles['Normal']))
@@ -204,6 +223,43 @@ def scanner():
 @app.route('/scan')
 def scan_qr_page():
     return render_template('scan.html')  # HTML includes html5-qrcode
+# ----------------------------- Admin Panel -----------------------------
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "1234"
+
+@app.route('/admin_login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session["admin_logged_in"] = True
+            return redirect(url_for("admin_panel"))
+        else:
+            flash("Invalid credentials", "danger")
+    return render_template("admin_login.html")
+
+@app.route('/admin')
+def admin_panel():
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin_login"))
+    students = Student.query.all()
+    return render_template("admin_panel.html", students=students)
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete_student(id):
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin_login"))
+    student = Student.query.get_or_404(id)
+    db.session.delete(student)
+    db.session.commit()
+    flash("Student deleted successfully.", "success")
+    return redirect(url_for('admin_panel'))
 
 # ----------------------------- Run -----------------------------
 if __name__ == '__main__':

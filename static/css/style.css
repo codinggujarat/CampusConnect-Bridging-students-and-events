@@ -90,3 +90,256 @@ body {
         font-size: 20px;
     }
 }
+
+
+/* side bar css */
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    background-color: #fff;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+    padding-top: 20px;
+    transition: transform 0.3s ease;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    padding: 20px;
+}
+
+.sidebar ul li {
+    list-style-type: none;
+    text-transform: uppercase;
+}
+
+.sidebar a {
+    display: block;
+    color: #000;
+    font-size: 15px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+
+/* Main content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    background: #f1f2f8;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Long content style */
+.content-block {
+    height: 2000px;
+}
+
+/* Menu button (only mobile) */
+.menu-btn {
+    display: none;
+    background: #222;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+/* Mobile view adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .menu-btn {
+        display: inline-block;
+    }
+}
+
+/* logout  */
+.logout {
+    position: absolute;
+    bottom: 0;
+    width: 80%;
+}
+
+
+/* student */
+.paid {
+    color: green;
+    font-weight: bold;
+}
+
+.not-paid {
+    color: red;
+    font-weight: bold;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.table thead th {
+    background: #ffffff !important;
+    font-family: 'poppins', sans-serif !important;
+}
+
+.table tr th {
+    text-transform: uppercase;
+    font-weight: bolder;
+    font-family: 'poppins', sans-serif !important;
+    font-size: 13px;
+}
+
+.menu-btn {
+    display: none;
+    background: #333;
+    color: white;
+    padding: 10px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
+
+.form-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+form {
+    background: #4553e7;
+    color: white;
+    padding: 30px 40px;
+    max-width: 500px;
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+}
+
+input::placeholder {
+    color: #666;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffffff;
+    color: #4553e7;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #e6e6e6;
+}
+
+@media (max-width: 480px) {
+    form {
+        padding: 25px 20px;
+    }
+
+    form h2 {
+        font-size: 20px;
+    }
+}
+
+
+/*  scanner*/
+.scanner-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.scanner-box {
+    background-color: #4553e7;
+    color: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+}
+
+.scanner-box h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+#reader {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #d1ffd1;
+}
+
+@media (max-width: 480px) {
+    .scanner-box {
+        padding: 25px 20px;
+    }
+
+    .scanner-box h2 {
+        font-size: 20px;
+    }
+}
