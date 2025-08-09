@@ -234,7 +234,7 @@ def admin_login():
         password = request.form["password"]
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session["admin_logged_in"] = True
-            return redirect(url_for("admin_panel"))
+            return redirect(url_for("admin_dashboard"))
         else:
             flash("Invalid credentials", "danger")
     return render_template("admin_login.html")
@@ -260,6 +260,28 @@ def delete_student(id):
     db.session.commit()
     flash("Student deleted successfully.", "success")
     return redirect(url_for('admin_panel'))
+
+@app.route("/admin-dashboard")
+def admin_dashboard():
+    students = Student.query.all()
+
+    # Overall counts
+    total_present = sum(1 for s in students if s.attended)
+    total_absent = sum(1 for s in students if not s.attended)
+
+    # Semester-wise counts
+    sem_stats = {}
+    for sem in range(1, 7):
+        sem_present = sum(1 for s in students if s.semester == sem and s.attended)
+        sem_absent = sum(1 for s in students if s.semester == sem and not s.attended)
+        sem_stats[sem] = {"present": sem_present, "absent": sem_absent}
+
+    return render_template(
+        "admin_dashboard.html",
+        total_present=total_present,
+        total_absent=total_absent,
+        sem_stats=sem_stats
+    )
 
 # ----------------------------- Run -----------------------------
 if __name__ == '__main__':
