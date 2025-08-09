@@ -103,6 +103,7 @@ body {
     left: 0;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
     padding-top: 20px;
+    z-index: 9999 !important;
     transition: transform 0.3s ease;
 }
 
@@ -203,10 +204,14 @@ body {
 }
 
 .table tr th {
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-weight: bolder;
     font-family: 'poppins', sans-serif !important;
     font-size: 13px;
+}
+
+.table tr td {
+    font-size: 14px;
 }
 
 .menu-btn {
@@ -224,122 +229,218 @@ body {
     }
 }
 
-.form-container {
-    min-height: 100vh;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Chillax', sans-serif;
+    font-family: 'Quicksand', sans-serif;
+}
+
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: black;
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.form.Dashboard {
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+
+}
+
+.Dashboard a {
     display: flex;
     align-items: center;
+    text-transform: uppercase;
+    text-decoration: none;
     justify-content: center;
-    padding: 20px;
 }
 
-form {
-    background: #4553e7;
-    color: white;
-    padding: 30px 40px;
-    max-width: 500px;
+::placeholder {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.form button {
+    align-self: flex-end;
+}
+
+.flex-column {
+    margin-top: 20px;
+}
+
+.flex-column>label {
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Base Select */
+.styled-select {
     width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-form h2 {
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 24px;
-}
-
-label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 500;
-}
-
-input {
-    width: 100%;
-    padding: 12px 14px;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    color: #333;
+    padding: 12px 16px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6a0dad, #4b0082);
+    color: #fff;
+    font-size: 1rem;
+    appearance: none;
     outline: none;
+    box-shadow: 0 4px 10px rgba(106, 13, 173, 0.3);
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 14px;
+}
+
+/* Options styling (for browsers that support it) */
+.styled-select option {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Placeholder color */
+.styled-select option[value=""] {
+    color: #ccc;
+}
+
+.inputForm svg {
+    fill: #fff;
+}
+
+.inputForm {
+    margin-top: 10px;
+    border: 1.5px solid #ecedec;
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    transition: 0.2s ease-in-out;
+}
+
+.input {
+    margin-left: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: transparent;
+    width: 85%;
+    color: #fff;
+    height: 100%;
 }
 
 input::placeholder {
-    color: #666;
+    color: #fff;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #ffffff;
-    color: #4553e7;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease;
+.input:focus {
+    background: none;
+    outline: none;
 }
 
-button:hover {
-    background-color: #e6e6e6;
+.inputForm:focus-within {
+    border: 1.5px solid #2d79f3;
 }
 
-@media (max-width: 480px) {
-    form {
-        padding: 25px 20px;
-    }
-
-    form h2 {
-        font-size: 20px;
-    }
-}
-
-
-/*  scanner*/
-.scanner-container {
-    min-height: 100vh;
+.flex-row {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.flex-row>div>label {
+    font-size: 14px;
+    color: #fff !important;
+    font-weight: 400;
+}
+
+.span {
+    font-size: 14px;
+    margin-left: 5px;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.button-submit {
+    margin: 20px 0 10px 0;
+    background-color: #f1f2f8;
+    border: none;
+    color: #000;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+
+.p {
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.btn {
+    margin-top: 10px;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    gap: 10px;
+    border: 1px solid #ededef;
+    background-color: white;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+.btn:hover {
+    border: 1px solid #2d79f3;
+
+}
+
+/* dashboard */
+.icon {
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    font-size: 100px;
 }
 
-.scanner-box {
-    background-color: #4553e7;
-    color: white;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    max-width: 480px;
-    width: 100%;
-    text-align: center;
+/* title form */
+.title {
+    font-size: 20px;
+    text-transform: capitalize;
+    color: #fff !important;
+    padding: 10px;
 }
 
-.scanner-box h2 {
+/* base */
+.alert {
+    background-color: #ffff;
+    color: #fff;
+    padding: 10px;
+    font-weight: bolder;
+    border-radius: 5px;
     margin-bottom: 20px;
-    font-size: 24px;
-}
-
-#reader {
-    width: 100%;
-    margin-top: 20px;
-}
-
-#result {
-    margin-top: 20px;
-    font-size: 16px;
-    color: #d1ffd1;
-}
-
-@media (max-width: 480px) {
-    .scanner-box {
-        padding: 25px 20px;
-    }
-
-    .scanner-box h2 {
-        font-size: 20px;
-    }
 }

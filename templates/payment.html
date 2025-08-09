@@ -23,7 +23,7 @@
         }
 
         .payment-box {
-            background-color: #4553e7;
+            background: #000;
             color: white;
             padding: 30px 40px;
             border-radius: 12px;
@@ -36,13 +36,14 @@
         .payment-box h2 {
             margin-bottom: 20px;
             font-size: 24px;
+            text-align: left;
         }
 
         #rzp-button {
             width: 100%;
             padding: 12px;
             background-color: #ffffff;
-            color: #4553e7;
+            color: #000;
             font-weight: bold;
             border: none;
             border-radius: 6px;
@@ -70,7 +71,9 @@
 <body>
     <div class="payment-container">
         <div class="payment-box">
-            <h2>Pay ₹100 to Join the Event</h2>
+            <div class="title">
+                <h2>Pay ₹100 to Join the Event</h2>
+            </div>
             <button id="rzp-button">Pay Now</button>
         </div>
     </div>
