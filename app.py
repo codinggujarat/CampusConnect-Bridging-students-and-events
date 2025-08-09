@@ -234,7 +234,7 @@ def admin_login():
         password = request.form["password"]
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session["admin_logged_in"] = True
-            return redirect(url_for("admin_dashboard"))
+            return redirect(url_for("admin_panel"))
         else:
             flash("Invalid credentials", "danger")
     return render_template("admin_login.html")
