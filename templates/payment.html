@@ -5,7 +5,12 @@
     <meta charset="UTF-8">
     <title>Pay with Razorpay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link
+        href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,700&f[]=clash-grotesk@200,300,400,700&f[]=chillax@200,400,500,700&f[]=panchang@200,300,400,500,600&f[]=poppins@100,200,300&f[]=quicksand@300,400,500&display=swap"
+        rel="stylesheet">
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -23,11 +28,9 @@
         }
 
         .payment-box {
-            background: #000;
             color: white;
             padding: 30px 40px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             max-width: 400px;
             width: 100%;
             text-align: center;
@@ -39,22 +42,6 @@
             text-align: left;
         }
 
-        #rzp-button {
-            width: 100%;
-            padding: 12px;
-            background-color: #ffffff;
-            color: #000;
-            font-weight: bold;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        #rzp-button:hover {
-            background-color: #e6e6e6;
-        }
 
         @media (max-width: 480px) {
             .payment-box {
@@ -65,19 +52,30 @@
                 font-size: 20px;
             }
         }
+
+        .form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 
 <body>
-    <div class="payment-container">
-        <div class="payment-box">
-            <div class="title">
-                <h2>Pay ₹100 to Join the Event</h2>
+    <div class="Registration-div">
+        <div class="bannerimg">
+            <img src="/static/banner/hero.jpg" alt="">
+        </div>
+        <div class="form">
+            <div class="logo">
+                <h1>Campus Connect</h1>
             </div>
-            <button id="rzp-button">Pay Now</button>
+            <div class="title">
+                <h3>Pay ₹100 to Join the Event</h2>
+            </div>
+            <button id="rzp-button" class="button-submit">Pay Now</button>
         </div>
     </div>
-
     <form id="payment-success-form" action="/payment-success" method="POST" style="display: none;">
         <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
     </form>

@@ -4,81 +4,47 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link
+        href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,700&f[]=clash-grotesk@200,300,400,700&f[]=chillax@200,400,500,700&f[]=panchang@200,300,400,500,600&f[]=poppins@100,200,300&f[]=quicksand@300,400,500&display=swap"
+        rel="stylesheet">
+
     <title>Download Confirmation</title>
     <style>
-        body {
-            margin: 0;
-            background-color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .download-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .download-box {
-            background-color: #4553e7;
-            color: white;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .download-box h2 {
-            margin-bottom: 15px;
-            font-size: 24px;
-        }
-
-        .download-box p {
-            margin-bottom: 25px;
-            font-size: 16px;
-        }
-
-        .download-box a {
-            display: block;
-            margin: 10px 0;
+        .button-submit {
             text-decoration: none;
-            background-color: #ffffff;
-            color: #4553e7;
-            padding: 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background 0.3s ease;
+            display: flex !important;
+            align-items: center !important;
+            font-weight: normal;
+            justify-content: center !important;
+            margin: 0;
         }
 
-        .download-box a:hover {
-            background-color: #e6e6e6;
-        }
-
-        @media (max-width: 480px) {
-            .download-box {
-                padding: 25px 20px;
-            }
-
-            .download-box h2 {
-                font-size: 20px;
-            }
+        .download p {
+            margin-bottom: 20px;
         }
     </style>
 </head>
 
 <body>
-    <div class="download-container">
-        <div class="download-box">
-            <h2>Registration Successful!</h2>
-            <p>Download your confirmation files below:</p>
-
-            <a href="{{ url_for('get_qr', uid=uid) }}" download>Download QR Code</a>
-            <a href="{{ url_for('get_pdf', uid=uid) }}" download>Download PDF Confirmation</a>
-            <a href="/">Back to Home</a>
+    <div class="Registration-div">
+        <div class="bannerimg">
+            <img src="/static/banner/hero.jpg" alt="">
         </div>
+        <div class="form download">
+            <div class="logo">
+                <h1>Campus Connect</h1>
+            </div>
+            <div class="title">
+                <h2>Registration Successful!</h2>
+            </div>
+            <p>Download your confirmation files below:</p>
+            <a href="{{ url_for('get_qr', uid=uid) }}" class="button-submit" download>Download QR Code</a>
+            <a href="{{ url_for('get_pdf', uid=uid) }}" class="button-submit" download>Download PDF
+                Confirmation</a>
+            <a href="/" class="button-submit">Back to Home</a>
+        </div>
+
     </div>
 </body>
 
