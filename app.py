@@ -8,6 +8,7 @@ import csv
 import os
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet
+from twilio.rest import Client  # New import for WhatsApp
 
 # Load environment variables
 load_dotenv()
@@ -23,6 +24,24 @@ RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
 RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
 razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
+# Twilio WhatsApp settings
+
+TWILIO_SID = os.getenv('TWILIO_SID')
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+TWILIO_WHATSAPP = os.getenv('TWILIO_WHATSAPP', 'whatsapp:+14155238886')  # Twilio sandbox
+
+def send_whatsapp_confirmation(mobile_number, name, event_id):
+    try:
+        client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
+        message = client.messages.create(
+            from_=TWILIO_WHATSAPP,
+            body=f"Hello {name}, your registration is confirmed! Your Event ID is {event_id}. See you at the event 🎉",
+            to=f'whatsapp:+91{mobile_number}'  # Change +91 if not India
+        )
+        print(f"WhatsApp message sent: {message.sid}")
+    except Exception as e:
+        print(f"Error sending WhatsApp message: {e}")
+
 # ----------------------------- Models -----------------------------
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,28 +49,27 @@ class Student(db.Model):
     name = db.Column(db.String(100))
     email = db.Column(db.String(100))
     semester = db.Column(db.Integer)
+    mobile_number = db.Column(db.String(15))  # New field
     attended = db.Column(db.Boolean, default=False)
-        # New payment details
     upi_id = db.Column(db.String(100))
     transaction_id = db.Column(db.String(100))
     payment_status = db.Column(db.String(50))
-
 
 # ----------------------------- CSV Helpers -----------------------------
 CSV_PATH = os.path.join('static', 'csv_exports', 'registrations.csv')
 os.makedirs(os.path.dirname(CSV_PATH), exist_ok=True)
 
-def append_to_csv(name, email, semester, unique_id, paid=False, upi_id=None):
+def append_to_csv(name, email, semester, unique_id, mobile_number, paid=False, upi_id=None):
     file_exists = os.path.isfile(CSV_PATH)
     with open(CSV_PATH, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         if not file_exists:
-            writer.writerow(['Name', 'Email', 'Semester', 'Event ID', 'Payment Status', 'Paid via', 'Amount', 'UPI ID', 'Attendance'])
+            writer.writerow(['Name', 'Email', 'Semester', 'Mobile Number', 'Event ID', 'Payment Status', 'Paid via', 'Amount', 'UPI ID', 'Attendance'])
 
         if paid:
-            writer.writerow([name, email, semester, unique_id, 'Paid', 'Razorpay', '₹100', upi_id, 'Not Marked'])
+            writer.writerow([name, email, semester, mobile_number, unique_id, 'Paid', 'Razorpay', '₹100', upi_id, 'Not Marked'])
         else:
-            writer.writerow([name, email, semester, unique_id, '-', '-', '-', '-', 'Not Marked'])
+            writer.writerow([name, email, semester, mobile_number, unique_id, '-', '-', '-', '-', 'Not Marked'])
 
 def update_attendance_in_csv(uid):
     if not os.path.isfile(CSV_PATH):
@@ -61,10 +79,9 @@ def update_attendance_in_csv(uid):
         reader = csv.reader(f)
         headers = next(reader)
         for row in reader:
-            if row[3] == uid:  # Match on Event ID
+            if row[4] == uid:  # Event ID column changed due to new mobile column
                 row[-1] = 'Present'
             rows.append(row)
-
     with open(CSV_PATH, 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow(headers)
@@ -80,16 +97,19 @@ def pay():
     name = request.form['name']
     email = request.form['email']
     semester = int(request.form['semester'])
+    mobile_number = request.form['mobile_number']
     unique_id = f"MSCCAIT2025-{str(uuid.uuid4())[:8]}"
 
     if semester == 1:
-        student = Student(name=name, email=email, semester=semester, unique_id=unique_id)
+        student = Student(name=name, email=email, semester=semester, mobile_number=mobile_number, unique_id=unique_id)
         db.session.add(student)
         db.session.commit()
 
         generate_qr_code(unique_id)
         generate_pdf(name, email, semester, unique_id)
-        append_to_csv(name, email, semester, unique_id, paid=False)
+        append_to_csv(name, email, semester, unique_id, mobile_number, paid=False)
+
+        send_whatsapp_confirmation(mobile_number, name, unique_id)
 
         flash("Free registration successful!", "success")
         return redirect(url_for('download_all', uid=unique_id))
@@ -98,6 +118,7 @@ def pay():
             'name': name,
             'email': email,
             'semester': semester,
+            'mobile_number': mobile_number,
             'unique_id': unique_id
         }
         order = razorpay_client.order.create(dict(amount=10000, currency='INR', payment_capture='1'))
@@ -115,9 +136,8 @@ def payment_success():
         flash("Session expired. Please register again.", "error")
         return redirect(url_for('home'))
 
-    # Retrieve payment details from Razorpay POST data
     razorpay_payment_id = request.form.get('razorpay_payment_id')
-    upi_id = request.form.get('upi_id')  # Only if you collect it from the form or webhook
+    upi_id = request.form.get('upi_id')
     payment_status = "Paid"
 
     student = Student(
@@ -133,12 +153,13 @@ def payment_success():
     generate_qr_code(student.unique_id)
     generate_pdf(student.name, student.email, student.semester, student.unique_id, paid=True,
                  upi_id=student.upi_id, transaction_id=student.transaction_id)
-    append_to_csv(student.name, student.email, student.semester, student.unique_id, paid=True,
+    append_to_csv(student.name, student.email, student.semester, student.unique_id, student.mobile_number, paid=True,
                   upi_id=student.upi_id)
+
+    send_whatsapp_confirmation(student.mobile_number, student.name, student.unique_id)
 
     flash("Payment successful! Download your QR and PDF below.", "success")
     return redirect(url_for('download_all', uid=student.unique_id))
-
 
 # ----------------------------- QR / PDF -----------------------------
 def generate_qr_code(uid):
@@ -200,16 +221,13 @@ def verify(uid):
     student = Student.query.filter_by(unique_id=uid).first()
     if not student:
         return f"<h3>❌ Invalid QR or student not registered.</h3>"
-
     if student.attended:
         return f"<h3>⚠️ {student.name} has already attended.</h3>"
-
     student.attended = True
     db.session.commit()
     update_attendance_in_csv(uid)
     return f"<h3>✅ Attendance marked for {student.name} (Sem {student.semester}).</h3>"
 
-# Scanner Manual Fallback
 @app.route('/verify')
 def verify_redirect():
     uid = request.args.get('uid')
@@ -218,11 +236,12 @@ def verify_redirect():
 # ----------------------------- Scanner Page -----------------------------
 @app.route('/scanner')
 def scanner():
-    return render_template('scanner.html')  # HTML includes html5-qrcode
+    return render_template('scanner.html')
 
 @app.route('/scan')
 def scan_qr_page():
-    return render_template('scan.html')  # HTML includes html5-qrcode
+    return render_template('scan.html')
+
 # ----------------------------- Admin Panel -----------------------------
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "1234"
@@ -264,24 +283,14 @@ def delete_student(id):
 @app.route("/admin-dashboard")
 def admin_dashboard():
     students = Student.query.all()
-
-    # Overall counts
     total_present = sum(1 for s in students if s.attended)
     total_absent = sum(1 for s in students if not s.attended)
-
-    # Semester-wise counts
     sem_stats = {}
     for sem in range(1, 7):
         sem_present = sum(1 for s in students if s.semester == sem and s.attended)
         sem_absent = sum(1 for s in students if s.semester == sem and not s.attended)
         sem_stats[sem] = {"present": sem_present, "absent": sem_absent}
-
-    return render_template(
-        "admin_dashboard.html",
-        total_present=total_present,
-        total_absent=total_absent,
-        sem_stats=sem_stats
-    )
+    return render_template("admin_dashboard.html", total_present=total_present, total_absent=total_absent, sem_stats=sem_stats)
 
 # ----------------------------- Run -----------------------------
 if __name__ == '__main__':
