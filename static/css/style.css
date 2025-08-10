@@ -121,26 +121,22 @@ body {
     font-weight: bold;
 }
 
-}
-
-.sidebar ul {
-    padding: 20px;
-}
 
 .sidebar ul li:first-child {
     margin-top: 20px;
 }
 
 .sidebar ul li {
-    font-weight: bold;
+    font-weight: 700;
     list-style-type: none;
     text-transform: capitalize;
 }
 
 .sidebar a {
     display: block;
+    text-transform: uppercase;
     color: #000;
-    font-size: 17px;
+    font-size: 14px;
     text-decoration: none;
     transition: background 0.3s;
 }
@@ -196,7 +192,8 @@ body {
 .logout {
     position: absolute;
     bottom: 0;
-    width: 80%;
+    right: 0;
+    width: 100%;
 }
 
 
@@ -528,4 +525,76 @@ input::placeholder {
     font-family: 'Chillax', sans-serif;
     text-transform: capitalize;
     font-size: 30px;
+}
+
+.sidebar .nav-link {
+    color: #555;
+    font-weight: 500;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    margin: 0.2rem 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: #e5f1ec;
+    color: #046c4e;
+}
+
+/* Dashboard cards */
+.stat-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    text-align: left;
+}
+
+.stat-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #777;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #111;
+}
+
+.stat-change {
+    font-size: 0.8rem;
+    color: #04aa6d;
+}
+
+/* Semester cards */
+.sem-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+}
+
+.sem-card h6 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.present {
+    color: #04aa6d;
+    font-weight: bold;
+}
+
+.absent {
+    color: #e63946;
+    font-weight: bold;
+}
+
+.nav-item span{
+    font-weight: bold;
 }

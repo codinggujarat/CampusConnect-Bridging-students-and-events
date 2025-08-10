@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
+from flask import Flask, render_template,jsonify, request, redirect, url_for, flash, session, send_file
+import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import razorpay
+import random
 import uuid
 import qrcode
 import csv
@@ -35,7 +37,7 @@ def send_whatsapp_confirmation(mobile_number, name, event_id):
         client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
         message = client.messages.create(
             from_=TWILIO_WHATSAPP,
-            body=f"Hello {name}, your registration is confirmed! Your Event ID is {event_id}. See you at the event 🎉",
+            body = f"🎉 Hi {name}! Welcome aboard 🚀 Your spot with *Campus Connect* is locked in ✅ Event ID: {event_id}. Get ready for an amazing experience!",
             to=f'whatsapp:+91{mobile_number}'  # Change +91 if not India
         )
         print(f"WhatsApp message sent: {message.sid}")
@@ -291,6 +293,27 @@ def admin_dashboard():
         sem_absent = sum(1 for s in students if s.semester == sem and not s.attended)
         sem_stats[sem] = {"present": sem_present, "absent": sem_absent}
     return render_template("admin_dashboard.html", total_present=total_present, total_absent=total_absent, sem_stats=sem_stats)
+
+
+@app.route('/chart_data')
+def chart_data():
+    # Safe CSV path (works on any OS)
+    file_path = os.path.join(app.root_path, 'static', 'csv_exports', 'registrations.csv')
+
+    # If file missing → return empty dataset
+    if not os.path.exists(file_path):
+        return jsonify({"labels": [], "values": []})
+
+    # Read CSV without headers (since you said no col names)
+    df = pd.read_csv(file_path, header=None)
+
+    # Semester is column index 2 (third column)
+    semester_counts = df[2].value_counts().sort_index()
+
+    labels = semester_counts.index.astype(str).tolist()
+    values = semester_counts.values.tolist()
+
+    return jsonify({"labels": labels, "values": values})
 
 # ----------------------------- Run -----------------------------
 if __name__ == '__main__':
