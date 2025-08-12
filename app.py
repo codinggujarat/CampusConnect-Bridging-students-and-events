@@ -35,13 +35,40 @@ TWILIO_WHATSAPP = os.getenv('TWILIO_WHATSAPP', 'whatsapp:+14155238886')  # Twili
 
 def send_whatsapp_confirmation(mobile_number, name, event_id):
     try:
+        # Fetch student from DB using event_id (assuming event_id is unique_id)
+        student = Student.query.filter_by(unique_id=event_id).first()
+        
+        if not student:
+            print(f"No student found for Event ID: {event_id}")
+            return
+        
+        # Build payment info message
+        payment_info = ""
+        if student.semester >= 2:
+            payment_info = (
+                f"\n\n💳 Payment Details:\n"
+                f"Amount Paid: ₹100\n"
+                f"UPI ID: {student.upi_id or 'N/A'}\n"
+                f"Transaction ID: {student.transaction_id or 'N/A'}\n"
+                f"Payment Status: {student.payment_status or 'Pending'}"
+            )
+        else:
+            payment_info = "\n\n💰 Semester 1 students attend for FREE 🎉"
+
         client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
         message = client.messages.create(
             from_=TWILIO_WHATSAPP,
-            body = f"🎉 Hi {name}! Welcome aboard 🚀 Your spot with *Campus Connect* is locked in ✅ Event ID: {event_id}. Get ready for an amazing experience!",
+            body=(
+                f"🎉 Hi {name}! Welcome aboard 🚀\n"
+                f"Your spot with *Campus Connect* is locked in ✅\n"
+                f"Event ID: {event_id}."
+                f"{payment_info}\n\n"
+                f"Get ready for an amazing experience! 🎯"
+            ),
             to=f'whatsapp:+91{mobile_number}'  # Change +91 if not India
         )
         print(f"WhatsApp message sent: {message.sid}")
+
     except Exception as e:
         print(f"Error sending WhatsApp message: {e}")
 
