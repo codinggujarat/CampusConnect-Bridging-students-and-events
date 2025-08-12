@@ -1,122 +1,101 @@
-<!DOCTYPE html>
-<html>
+{% extends "sidebar.html" %}
+{% block title %}
+Student Info
+{% endblock %}
 
-<head>
-    <title>Admin Panel</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+<style>
+    .paid {
+        color: green;
+        font-weight: bold;
+    }
 
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .paid {
-            color: green;
-            font-weight: bold;
-        }
-
-        .not-paid {
-            color: red;
-            font-weight: bold;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .banner {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            /* adjustable */
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            margin-bottom: 29px;
-            z-index: 1;
-        }
-
-        .banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
+    .not-paid {
+        color: red;
+        font-weight: bold;
+    }
 
 
-        .banner-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            color: #fff;
-            padding: 20px;
-        }
 
-        .banner-overlay h1 {
-            font-size: 2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
+    .deleteform {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background-color: transparent;
+    }
 
-        .banner-overlay p {
-            font-size: 1rem;
-            font-weight: bold;
-            max-width: 800px;
-        }
+    .deleteform button {
+        padding: 0;
+        margin: 0;
+        border: 0;
+        outline: 0;
+    }
+</style>
+{% block nav_bar %}
+<nav class="nav navbar navbar-expand-lg bg-white navbar-light iq-navbar">
+    <div class="container-fluid navbar-inner">
+        <a href="/admin-dashboard" class="navbar-brand">
+            <!--Logo start-->
+            <div class="logo-main">
+                <div class="logo-normal">
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .banner {
-                height: 200px;
-            }
+                </div>
+                <div class="logo-mini">
 
-            .banner-overlay h1 {
-                font-size: 1.5rem;
-            }
-
-            .banner-overlay p {
-                font-size: 0.9rem;
-            }
-        }
-
-        .deleteform {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            background-color: transparent;
-        }
-
-        .deleteform button {
-            padding: 0;
-            margin: 0;
-            border: 0;
-            outline: 0;
-        }
-    </style>
-</head>
-
-<body>
-    {% include "sidebar.html" %}
-    <div class="main-content">
-        <div class="w-100">
-            <button class="menu-btn" id="menu-btn">&#9776; Menu</button>
+                </div>
+            </div>
+            <!--logo End-->
+            <h4 class="logo-title">Campus Connect</h4>
+        </a>
+        <div class="sidebar-toggle bg-black" data-toggle="sidebar" data-active="true">
+            <i class="icon">
+                <svg width="20px" class="icon-20" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+                </svg>
+            </i>
         </div>
-        <div class="banner">
-            <img src="/static/banner/banner.jpg" alt="Banner Image">
-            <div class="banner-overlay">
-                <h1>CampusConnect - Bridging students and events</h1>
-                <p>Connecting students with campus events, opportunities, and experiences in one place.</p>
+        <div class="input-group search-input mt-5">
+        </div>
+    </div>
+</nav>
+{% endblock %}
+{% block main_bar %}
+<div class="position-relative iq-banner">
+    <div class="iq-navbar-header" style="height: 300px;">
+        <div class="container-fluid iq-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="flex-wrap d-flex justify-content-between align-items-center  ">
+                        <div>
+                            <h1>CampusConnect - Bridging students and events</h1>
+                            <p>Connecting students with campus events, opportunities, and experiences in one place.</p>
+                        </div>
+                        <div>
+                    
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="iq-header-img h-70 ">
+            <img src="/static/banner/hero.jpg" alt="header"
+                class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
+        </div>
+    </div>
+</div>
+{% endblock %}
 
-        <!-- Mobile Menu Button -->
-        <table class="table table-bordered table-hover">
+{% block content %}
+<!-- Mobile Menu Button -->
+<div class="card ">
+    <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+            <h4 class="card-title">Student Info</h4>
+        </div>
+    </div>
+    <div class="table-responsive card-body">
+
+        <table id="datatable" class="table table-striped" data-toggle="data-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -173,13 +152,11 @@
                         —
                         {% endif %}
                     </td>
-                    <td style="    display: flex;
-    align-items: center;justify-content: center;
-">
+                    <td style="    display: flex;align-items: center;justify-content: center;">
                         <form method="POST" class="deleteform" style="background: transparent; padding: 0 ;margin: 0;"
                             action="/delete/{{ student.id }}"
                             onsubmit="return confirm('Are you sure you want to delete this student?');">
-                            <button type="submit" class="">
+                            <button type="submit" class=" " style="border: 0; background: transparent;">
                                 <i class="bx bx-trash"></i>
                             </button>
                         </form>
@@ -189,8 +166,7 @@
             </tbody>
         </table>
     </div>
-    <script src="/static/js/script.js"></script>
+</div>
 
-</body>
 
-</html>
+{% endblock %}

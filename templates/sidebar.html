@@ -4,152 +4,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link
         href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,700&f[]=clash-grotesk@200,300,400,700&f[]=chillax@200,400,500,700&f[]=panchang@200,300,400,500,600&f[]=poppins@100,200,300&f[]=quicksand@300,400,500&display=swap"
         rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Library / Plugin Css Build -->
+    <link rel="stylesheet" href="/static/assets/css/core/libs.min.css" />
+
+    <!-- Aos Animation Css -->
+    <link rel="stylesheet" href="/static/assets/vendor/aos/dist/aos.css" />
+
+    <!-- Campus Connect Design System Css -->
+    <link rel="stylesheet" href="/static/assets/css/hope-ui.min.css?v=2.0.0" />
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="/static/assets/css/custom.min.css?v=2.0.0" />
+
+    <!-- Dark Css -->
+    <link rel="stylesheet" href="/static/assets/css/dark.min.css" />
+
+    <!-- Customizer Css -->
+    <link rel="stylesheet" href="/static/assets/css/customizer.min.css" />
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    <!-- RTL Css -->
+    <link rel="stylesheet" href="/static/assets/css/rtl.min.css" />
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
+        .nav-item {
+            background: white !important;
+        }
+
+        .nav-item .nav-link:hover {
+            color: #000;
+            background: white !important;
+
+        }
+
+        .nav-item a {
+            color: #000 !important;
+            text-transform: uppercase !important;
+            font-size: 15px;
+        }
+
+        .logout a {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+
+        .nav-item.logout a:hover {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+
+        .card {
+            box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
         }
     </style>
 </head>
 
+
 <body>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebarlogo">
-            <h2>Campus Connect</h2>
+    <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
+        <div class="sidebar-header d-flex align-items-center justify-content-start">
+            <a href="/admin-dashboard" class="navbar-brand">
+                <!--Logo start-->
+                <!--logo End-->
+
+                <!--Logo start-->
+                <div class="logo-main">
+                    <div class="logo-normal">
+
+                    </div>
+                    <div class="logo-mini">
+                        <!-- -->
+                    </div>
+                </div>
+                <!--logo End-->
+                <h4 class="logo-title">Campus Connect</h4>
+            </a>
+            <div class="sidebar-toggle bg-black" data-toggle="sidebar" data-active="true">
+                <i class="icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.25 12.2744L19.25 12.2744" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M10.2998 18.2988L4.2498 12.2748L10.2998 6.24976" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </i>
+            </div>
         </div>
-        <ul class="m-0 ps-4 pe-4 list-unstyled">
-            <li class="nav-item mb-2">
-                <a href="/admin-dashboard" class="nav-link d-flex align-items-center gap-2 fw-medium px-2 py-2 rounded">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="none"
-                        role="img" aria-label="dashboard">
-                        <title>Dashboard</title>
-                        <!-- top-left panel -->
-                        <rect x="4" y="4" width="10" height="10" rx="1.5" ry="1.5" stroke="currentColor"
-                            stroke-width="3" fill="none" />
-                        <!-- top-right panel -->
-                        <rect x="18" y="4" width="10" height="6" rx="1.5" ry="1.5" stroke="currentColor"
-                            stroke-width="3" fill="none" />
-                        <!-- bottom-right panel -->
-                        <rect x="18" y="12" width="10" height="16" rx="1.5" ry="1.5" stroke="currentColor"
-                            stroke-width="3" fill="none" />
-                        <!-- bottom-left panel -->
-                        <rect x="4" y="18" width="10" height="10" rx="1.5" ry="1.5" stroke="currentColor"
-                            stroke-width="3" fill="none" />
-                    </svg>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="/admin" class="nav-link d-flex align-items-center gap-2 fw-medium px-2 py-2 rounded">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="none"
-                        role="img" aria-label="student-info">
-                        <title>Student Info</title>
-                        <!-- head -->
-                        <circle cx="16" cy="10" r="4" stroke="currentColor" stroke-width="3" fill="none" />
-                        <!-- body -->
-                        <path d="M6 26c0-4.418 4.477-8 10-8s10 3.582 10 8" stroke="currentColor" stroke-width="3"
-                            fill="none" stroke-linecap="round" />
-                        <!-- info "i" -->
-                        <line x1="16" y1="14.5" x2="16" y2="14.5" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" />
-                        <line x1="16" y1="17" x2="16" y2="21" stroke="currentColor" stroke-width="3"
-                            stroke-linecap="round" />
-                    </svg>
-                    <span>
-                        Student Info
-                    </span>
-                </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="/scanner" class="nav-link d-flex align-items-center gap-2 fw-medium px-2 py-2 rounded">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="none"
-                        role="img" aria-label="scan-qr">
-                        <title>Scan QR</title>
-                        <!-- Top-left corner -->
-                        <rect x="4" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="3"
-                            fill="none" />
-                        <!-- Top-right corner -->
-                        <rect x="22" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="3"
-                            fill="none" />
-                        <!-- Bottom-left corner -->
-                        <rect x="4" y="22" width="6" height="6" rx="1" stroke="currentColor" stroke-width="3"
-                            fill="none" />
-                        <!-- Bottom-right corner -->
-                        <rect x="22" y="22" width="6" height="6" rx="1" stroke="currentColor" stroke-width="3"
-                            fill="none" />
-                        <!-- Scan line -->
-                        <line x1="2" y1="16" x2="30" y2="16" stroke="currentColor" stroke-width="3"
-                            stroke-linecap="round" />
-                    </svg>
-                    <span>
-                        Scan QR
-                    </span>
-                </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="/scan" class="nav-link d-flex align-items-center gap-2 fw-medium px-2 py-2 rounded">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="none"
-                        role="img" aria-label="track-scan">
-                        <title>Track Scan</title>
+        <div class="sidebar-body pt-0 data-scrollbar">
+            <div class="sidebar-list">
+                <!-- Sidebar Menu Start -->
+                <ul class="navbar-nav iq-main-menu" id="sidebar-menu">
+                    <li class="nav-item static-item">
+                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                            <span class="default-icon">Home</span>
+                            <span class="mini-icon">-</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " target="_self" href="/admin-dashboard">
+                            <i class="icon">
+                                <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                    class="icon-20">
+                                    <path opacity="0.4"
+                                        d="M16.0756 2H19.4616C20.8639 2 22.0001 3.14585 22.0001 4.55996V7.97452C22.0001 9.38864 20.8639 10.5345 19.4616 10.5345H16.0756C14.6734 10.5345 13.5371 9.38864 13.5371 7.97452V4.55996C13.5371 3.14585 14.6734 2 16.0756 2Z"
+                                        fill="currentColor"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </i>
+                            <span class="item-name">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin">
+                            <i class="icon">
+                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M17.8877 10.8967C19.2827 10.7007 20.3567 9.50473 20.3597 8.05573C20.3597 6.62773 19.3187 5.44373 17.9537 5.21973"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path
+                                        d="M19.7285 14.2505C21.0795 14.4525 22.0225 14.9255 22.0225 15.9005C22.0225 16.5715 21.5785 17.0075 20.8605 17.2815"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M11.8867 14.6638C8.67273 14.6638 5.92773 15.1508 5.92773 17.0958C5.92773 19.0398 8.65573 19.5408 11.8867 19.5408C15.1007 19.5408 17.8447 19.0588 17.8447 17.1128C17.8447 15.1668 15.1177 14.6638 11.8867 14.6638Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M11.8869 11.888C13.9959 11.888 15.7059 10.179 15.7059 8.069C15.7059 5.96 13.9959 4.25 11.8869 4.25C9.7779 4.25 8.0679 5.96 8.0679 8.069C8.0599 10.171 9.7569 11.881 11.8589 11.888H11.8869Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path
+                                        d="M5.88509 10.8967C4.48909 10.7007 3.41609 9.50473 3.41309 8.05573C3.41309 6.62773 4.45409 5.44373 5.81909 5.21973"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path
+                                        d="M4.044 14.2505C2.693 14.4525 1.75 14.9255 1.75 15.9005C1.75 16.5715 2.194 17.0075 2.912 17.2815"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>
+                            </i>
+                            <span class="item-name">Student Info</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/scanner">
+                            <i class="icon">
+                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22.5 12.8057H1.5" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                    <path
+                                        d="M20.6304 8.5951V7.0821C20.6304 5.0211 18.9594 3.3501 16.8974 3.3501H15.6924"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path
+                                        d="M3.37012 8.5951V7.0821C3.37012 5.0211 5.04112 3.3501 7.10312 3.3501H8.33912"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path
+                                        d="M20.6304 12.8047V16.8787C20.6304 18.9407 18.9594 20.6117 16.8974 20.6117H15.6924"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path
+                                        d="M3.37012 12.8047V16.8787C3.37012 18.9407 5.04112 20.6117 7.10312 20.6117H8.33912"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>
+                            </i>
+                            <span class="item-name">QR Scan</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/scan">
+                            <i class="icon">
+                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M9.87651 15.2063C6.03251 15.2063 2.74951 15.7873 2.74951 18.1153C2.74951 20.4433 6.01251 21.0453 9.87651 21.0453C13.7215 21.0453 17.0035 20.4633 17.0035 18.1363C17.0035 15.8093 13.7415 15.2063 9.87651 15.2063Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M9.8766 11.886C12.3996 11.886 14.4446 9.841 14.4446 7.318C14.4446 4.795 12.3996 2.75 9.8766 2.75C7.3546 2.75 5.3096 4.795 5.3096 7.318C5.3006 9.832 7.3306 11.877 9.8456 11.886H9.8766Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M19.2036 8.66919V12.6792" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M21.2497 10.6741H17.1597" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </i>
+                            <span class="item-name">QR Attendance</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="hr-horizontal">
+                    </li>
 
-                        <!-- small QR-like block (left) -->
-                        <rect x="4" y="4" width="10" height="10" rx="1" ry="1" stroke="currentColor" stroke-width="3"
-                            fill="none" />
-                        <!-- tiny modules inside QR block -->
-                        <rect x="6.5" y="6.5" width="2.5" height="2.5" fill="currentColor" />
-                        <rect x="10.5" y="6.5" width="2.5" height="2.5" fill="currentColor" />
-                        <rect x="6.5" y="10.5" width="2.5" height="2.5" fill="currentColor" />
-                        <rect x="10.5" y="10.5" width="2.5" height="2.5" fill="currentColor" />
+                    <li class="nav-item logout ">
+                        <a class="nav-link" href="/logout">
+                            <i class="icon">
+                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M15.016 7.38948V6.45648C15.016 4.42148 13.366 2.77148 11.331 2.77148H6.45597C4.42197 2.77148 2.77197 4.42148 2.77197 6.45648V17.5865C2.77197 19.6215 4.42197 21.2715 6.45597 21.2715H11.341C13.37 21.2715 15.016 19.6265 15.016 17.5975V16.6545"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M21.8096 12.0215H9.76855" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M18.8813 9.1062L21.8093 12.0212L18.8813 14.9372" stroke="currentColor"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </i>
+                            <span class="item-name">logout</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Sidebar Menu End -->
+            </div>
+        </div>
+        <div class="sidebar-footer"></div>
+    </aside>
+    <main class="main-content">
+        {% block nav_bar %}
 
-                        <!-- another small QR fragment (top-right) -->
-                        <rect x="18" y="4" width="6" height="6" rx="0.8" ry="0.8" stroke="currentColor" stroke-width="3"
-                            fill="none" />
+        {% endblock %}
 
-                        <!-- magnifying glass (center-right) -->
-                        <circle cx="22.5" cy="20.5" r="5" stroke="currentColor" stroke-width="3" fill="none" />
-                        <line x1="26.2" y1="24.2" x2="29" y2="27" stroke="currentColor" stroke-width="3"
-                            stroke-linecap="round" />
+        {% block main_bar %}
 
-                        <!-- subtle scan/check marker inside magnifier -->
-                        <path d="M20 19.5 L21.2 20.8 L23.8 18.2" stroke="currentColor" stroke-width="3"
-                            stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        {% endblock %}
 
-                    </svg>
-                    <span>
-                        Track Scan
-                    </span>
-                </a>
-            </li>
-            <li class="logout ps-4 pe-4">
-                <a href="/logout"
-                    class="nav-link d-flex align-items-center gap-2 fw-medium px-2 py-2 rounded bg-black p-2 rounded-5 text-white text-center mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="none"
-                        role="img" aria-label="logout">
-                        <title>Logout</title>
+        {% block content %}
+        {% endblock %}
+    </main>
 
-                        <!-- door / container -->
-                        <rect x="4" y="6" width="16" height="20" rx="2" ry="2" stroke="currentColor" stroke-width="3"
-                            fill="none" />
+    <!-- Library Bundle Script -->
+    <script src="/static/assets/js/core/libs.min.js"></script>
 
-                        <!-- door handle -->
-                        <circle cx="12" cy="16" r="0.9" fill="currentColor" />
+    <!-- External Library Bundle Script -->
+    <script src="/static/assets/js/core/external.min.js"></script>
 
-                        <!-- arrow pointing out (logout) -->
-                        <path d="M22 10 L28 16 L22 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                            stroke-linejoin="round" fill="none" />
-                        <line x1="18" y1="16" x2="28" y2="16" stroke="currentColor" stroke-width="3"
-                            stroke-linecap="round" />
+    <!-- Widgetchart Script -->
+    <script src="/static/assets/js/charts/widgetcharts.js"></script>
 
-                    </svg>
-                    <span>Logout</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <!-- mapchart Script -->
+    <script src="/static/assets/js/charts/vectore-chart.js"></script>
+    <script src="/static/assets/js/charts/dashboard.js"></script>
+
+    <!-- fslightbox Script -->
+    <script src="/static/assets/js/plugins/fslightbox.js"></script>
+
+    <!-- Settings Script -->
+    <script src="/static/assets/js/plugins/setting.js"></script>
+
+    <!-- Slider-tab Script -->
+    <script src="/static/assets/js/plugins/slider-tabs.js"></script>
+
+    <!-- Form Wizard Script -->
+    <script src="/static/assets/js/plugins/form-wizard.js"></script>
+
+    <!-- AOS Animation Plugin-->
+    <script src="/static/assets/vendor/aos/dist/aos.js"></script>
+
+    <!-- App Script -->
+    <script src="/static/assets/js/hope-ui.js" defer></script>
+
 </body>
 
 </html>

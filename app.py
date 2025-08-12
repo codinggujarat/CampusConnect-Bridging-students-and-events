@@ -2,6 +2,7 @@ from flask import Flask, render_template,jsonify, request, redirect, url_for, fl
 import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+from sqlalchemy import func
 import razorpay
 import random
 import uuid
@@ -221,14 +222,31 @@ def get_pdf(uid):
 @app.route('/verify/<uid>')
 def verify(uid):
     student = Student.query.filter_by(unique_id=uid).first()
+
     if not student:
-        return f"<h3>❌ Invalid QR or student not registered.</h3>"
+        return render_template(
+            'verify.html',
+            status="error",
+            message=" Invalid QR or student not registered."
+        )
+
     if student.attended:
-        return f"<h3>⚠️ {student.name} has already attended.</h3>"
+        return render_template(
+            'verify.html',
+            status="warning",
+            message=f" {student.name} has already attended."
+        )
+
+    # Mark attendance
     student.attended = True
     db.session.commit()
     update_attendance_in_csv(uid)
-    return f"<h3>✅ Attendance marked for {student.name} (Sem {student.semester}).</h3>"
+
+    return render_template(
+        'verify.html',
+        status="success",
+        message=f" Attendance marked for {student.name} (Sem {student.semester})."
+    )
 
 @app.route('/verify')
 def verify_redirect():
@@ -287,12 +305,21 @@ def admin_dashboard():
     students = Student.query.all()
     total_present = sum(1 for s in students if s.attended)
     total_absent = sum(1 for s in students if not s.attended)
+    total_students = len(students)  # ✅ Total number of students
+
     sem_stats = {}
     for sem in range(1, 7):
         sem_present = sum(1 for s in students if s.semester == sem and s.attended)
         sem_absent = sum(1 for s in students if s.semester == sem and not s.attended)
         sem_stats[sem] = {"present": sem_present, "absent": sem_absent}
-    return render_template("admin_dashboard.html", total_present=total_present, total_absent=total_absent, sem_stats=sem_stats)
+
+    return render_template(
+        "admin_dashboard.html",
+        total_present=total_present,
+        total_absent=total_absent,
+        total_students=total_students,  # ✅ Pass to template
+        sem_stats=sem_stats
+    )
 
 
 @app.route('/chart_data')
@@ -302,7 +329,11 @@ def chart_data():
 
     # If file missing → return empty dataset
     if not os.path.exists(file_path):
-        return jsonify({"labels": [], "values": []})
+        return jsonify({
+            "labels": [],
+            "values": [],
+            "legend": "Students per Semester"
+        })
 
     # Read CSV without headers (since you said no col names)
     df = pd.read_csv(file_path, header=None)
@@ -313,8 +344,23 @@ def chart_data():
     labels = semester_counts.index.astype(str).tolist()
     values = semester_counts.values.tolist()
 
-    return jsonify({"labels": labels, "values": values})
+    return jsonify({
+        "labels": labels,
+        "values": values,
+        "legend": "Students per Semester"
+    })
+    
+@app.route('/dashboard_data')
+def dashboard_data():
+    # Count students in semesters 2–6
+    paying_students = db.session.query(func.count(Student.id)) \
+                                .filter(Student.semester != 1) \
+                                .scalar() or 0
 
+    total_amount = paying_students * 100
+
+    return jsonify({"total_amount": total_amount})
+    
 # ----------------------------- Run -----------------------------
 if __name__ == '__main__':
     with app.app_context():

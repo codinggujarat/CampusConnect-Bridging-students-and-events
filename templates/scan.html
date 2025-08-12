@@ -1,131 +1,90 @@
-<!-- templates/scan.html -->
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <title>QR Attendance Verification</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .banner {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            /* adjustable */
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            margin-bottom: 29px;
-            z-index: 1;
-        }
-
-        .banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
+{% extends "sidebar.html" %}
+{% block title %}QR Attendance{% endblock %}
 
 
-        .banner-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            color: #fff;
-            padding: 20px;
-        }
+{% block nav_bar %}
+<nav class="nav navbar navbar-expand-lg bg-white navbar-light iq-navbar">
+    <div class="container-fluid navbar-inner">
+        <a href="/admin-dashboard" class="navbar-brand">
+            <!--Logo start-->
+            <div class="logo-main">
+                <div class="logo-normal">
 
-        .banner-overlay h1 {
-            font-size: 2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
+                </div>
+                <div class="logo-mini">
 
-        .banner-overlay p {
-            font-size: 1rem;
-            font-weight: bold;
-            max-width: 800px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .banner {
-                height: 200px;
-            }
-
-            .banner-overlay h1 {
-                font-size: 1.5rem;
-            }
-
-            .banner-overlay p {
-                font-size: 0.9rem;
-            }
-        }
-
-        .deleteform {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            background-color: transparent;
-        }
-
-        .deleteform button {
-            padding: 0;
-            margin: 0;
-            border: 0;
-            outline: 0;
-        }
-        .form-con{
-            display: flex;align-items: center;
-            justify-content: center;
-        }
-    </style>
-</head>
-
-<body>
-    {% include "sidebar.html" %}
-    <div class="main-content">
-        <div class="w-100">
-            <button class="menu-btn" id="menu-btn">&#9776; Menu</button>
-        </div>
-        <div class="banner">
-            <img src="/static/banner/banner.jpg" alt="Banner Image">
-            <div class="banner-overlay">
-
-                <h1>CampusConnect - Bridging students and events</h1>
-                <p>Connecting students with campus events, opportunities, and experiences in one place.</p>
+                </div>
             </div>
+            <!--logo End-->
+            <h4 class="logo-title">Campus Connect</h4>
+        </a>
+        <div class="sidebar-toggle bg-black" data-toggle="sidebar" data-active="true">
+            <i class="icon">
+                <svg width="20px" class="icon-20" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+                </svg>
+            </i>
         </div>
-        <div class="form-con">
-            <form action="/verify" method="get" class="form">
-                <div class="title">
-                    <h2>QR Attendance Approval</h2>
-                </div>
-                <div class="flex-column">
-                    <label for="uid">Scan or Enter Event ID</label>
-                    <div class="inputForm">
-                        <svg height="14" viewBox="0 0 32 32" width="20" xmlns="http://www.w3.org/2000/svg">
-                            <g id="Layer_3" data-name="Layer 3">
-                                <path
-                                    d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z">
-                                </path>
-                            </g>
-                        </svg>
-                        <input type="text" class=" input" name="uid" id="uid" placeholder="MSCCAIT2025-xxxxxx" required>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="button-submit">Verify & Approve Attendance</button>
-                </div>
-            </form>
+        <div class="input-group search-input mt-5">
         </div>
     </div>
-</body>
+</nav>
+{% endblock %}
 
-</html>
+{% block main_bar %}
+<div class="position-relative iq-banner">
+    <div class="iq-navbar-header" style="height: 350px;">
+        <div class="container-fluid iq-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="flex-wrap d-flex justify-content-between align-items-center  ">
+                        <div>
+                            <h1>CampusConnect - Bridging students and events</h1>
+                            <p>Connecting students with campus events, opportunities, and experiences in one place.</p>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="iq-header-img h-70 ">
+            <img src="/static/banner/hero.jpg" alt="header"
+                class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="conatiner-fluid content-inner mt-5 py-0">
+
+    <div class="form-con card ">
+        <form action="/verify" method="get" class="form">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title">QR Attendance Approval</h4>
+                </div>
+            </div>
+            <div class="form-group card-body">
+                <label for="uid" class="form-label">Scan or Enter Event ID</label>
+                <div class="inputForm" style="display: flex; align-items: center;justify-content: center;">
+                    <svg height="14" viewBox="0 0 32 32" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <g id="Layer_3" data-name="Layer 3">
+                            <path
+                                d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z">
+                            </path>
+                        </g>
+                    </svg>
+                    <input type="text" class=" form-control" name="uid" id="uid" placeholder="MSCCAIT2025-xxxxxx"
+                        required>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-dark button-submit">Verify & Approve Attendance</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

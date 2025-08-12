@@ -1,144 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <title>QR Code Attendance Scanner</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/static/css/style.css">
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
-  <style>
-    .banner {
-      position: relative;
-      width: 100%;
-      height: 200px;
-      /* adjustable */
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      margin-bottom: 29px;
-      z-index: 1;
-    }
-
-    .banner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s ease;
-    }
+{% extends "sidebar.html" %}
+{% block title %}Scan Student QR Code{% endblock %}
 
 
-    .banner-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      color: #fff;
-      padding: 20px;
-    }
+{% block nav_bar %}
+<nav class="nav navbar navbar-expand-lg bg-white navbar-light iq-navbar">
+  <div class="container-fluid navbar-inner">
+    <a href="/admin-dashboard" class="navbar-brand">
+      <!--Logo start-->
+      <div class="logo-main">
+        <div class="logo-normal">
 
-    .banner-overlay h1 {
-      font-size: 2rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
+        </div>
+        <div class="logo-mini">
 
-    .banner-overlay p {
-      font-size: 1rem;
-      font-weight: bold;
-      max-width: 800px;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .banner {
-        height: 200px;
-      }
-
-      .banner-overlay h1 {
-        font-size: 1.5rem;
-      }
-
-      .banner-overlay p {
-        font-size: 0.9rem;
-      }
-    }
-
-    .deleteform {
-      margin: 0;
-      padding: 0;
-      border: 0;
-      background-color: transparent;
-    }
-
-    .deleteform button {
-      padding: 0;
-      margin: 0;
-      border: 0;
-      outline: 0;
-    }
-
-    .scanner-container {
-      background-color: #f1f2f8;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .scanner-box {
-      max-width: 500px;
-      max-height: 500px;
-    }
-  </style>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
-  {% include "sidebar.html" %}
-  <div class="main-content">
-    <div class="w-100">
-      <button class="menu-btn" id="menu-btn">&#9776; Menu</button>
+        </div>
+      </div>
+      <!--logo End-->
+      <h4 class="logo-title">Campus Connect</h4>
+    </a>
+    <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
+      <i class="icon">
+        <svg width="20px" class="icon-20" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+        </svg>
+      </i>
     </div>
-    <div class="banner">
-      <img src="/static/banner/banner.jpg" alt="Banner Image">
-      <div class="banner-overlay">
-        <h1>CampusConnect - Bridging students and events</h1>
-        <p>Connecting students with campus events, opportunities, and experiences in one place.</p>
+    <div class="input-group search-input mt-5">
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block main_bar %}
+<div class="position-relative iq-banner">
+  <div class="iq-navbar-header" style="height: 350px;">
+    <div class="container-fluid iq-container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="flex-wrap d-flex justify-content-between align-items-center  ">
+            <div>
+              <h1>CampusConnect - Bridging students and events</h1>
+              <p>Connecting students with campus events, opportunities, and experiences in one place.</p>
+            </div>
+            <div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="scanner-container ">
-      <div class="scanner-box">
-        <div class="title">
-          <h2>Scan Student QR Code</h2>
+    <div class="iq-header-img h-70 ">
+      <img src="/static/banner/hero.jpg" alt="header"
+        class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container-fluid content-inner mt-5 py-0">
+  <div class="col-lg-6 bg-soft-info col-md-12">
+    <div class="card ">
+      <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+          <h4 class="card-title">Scan Student QR Code</h4>
         </div>
+      </div>
+      <div class="card-body">
         <div id="reader"></div>
         <div id="result"></div>
       </div>
     </div>
+  </div>
+</div>
 
-    <script>
-      function onScanSuccess(qrMessage) {
-        // Redirect to the verification route with UID
-        window.location.href = `/verify/${qrMessage}`;
-      }
+<script>
+  function onScanSuccess(qrMessage) {
+    // Redirect to the verification route with UID
+    window.location.href = `/verify/${qrMessage}`;
+  }
 
-      function onScanError(errorMessage) {
-        // Handle scan errors
-        console.warn(`QR Scan Error: ${errorMessage}`);
-      }
+  function onScanError(errorMessage) {
+    // Handle scan errors
+    console.warn(`QR Scan Error: ${errorMessage}`);
+  }
 
-      let scanner = new Html5QrcodeScanner("reader", {
-        fps: 10,
-        qrbox: 250
-      });
+  let scanner = new Html5QrcodeScanner("reader", {
+    fps: 10,
+    qrbox: 250
+  });
 
-      scanner.render(onScanSuccess, onScanError);
-    </script>
-</body>
+  scanner.render(onScanSuccess, onScanError);
+</script>
 
-</html>
+{% endblock %}
