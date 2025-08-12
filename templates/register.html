@@ -1,121 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}Campus Connect | Registration{% endblock %}
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link
-    href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,700&f[]=clash-grotesk@200,300,400,700&f[]=chillax@200,400,500,700&f[]=panchang@200,300,400,500,600&f[]=poppins@100,200,300&f[]=quicksand@300,400,500&display=swap"
-    rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
-  <title>Campus Connect | Registration</title>
-  
-</head>
 
-<body>
-  <div class="Registration-div">
-    <div class="bannerimg">
-      <img src="/static/banner/hero.jpg" alt="">
-    </div>
-    <div class="form">
-      <div class="logo">
-        <h1>Campus Connect</h1>
+
+{% block mainblock%}
+<style>
+  .flash-message {
+    font-family: 'Chillax', sans-serif;
+    color: #000;
+    text-align: center;
+  }
+</style>
+<div class="wrapper">
+  <section class="login-content">
+    <div class="row m-0 align-items-center bg-white vh-100">
+      <div class="col-md-6 d-md-block d-none bg-primary p-0 mt-n1 vh-100 overflow-hidden">
+        <img src="/static/banner/hero.jpg" class="img-fluid gradient-main animated-scaleX" alt="images">
       </div>
-      <div class="title">
-        <h2> Registration</h2>
+      <div class="col-md-6">
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+            <div class="card card-transparent auth-card shadow-none d-flex justify-content-center mb-0">
+              <div class="card-body">
+                <a href="#" class="navbar-brand d-flex align-items-center mb-3">
+                  <!--Logo start-->
+                  <!--logo End-->
+
+                  <!--Logo start-->
+                  <div class="logo-main">
+                    <div class="logo-normal">
+
+                    </div>
+                    <div class="logo-mini">
+
+                    </div>
+                  </div>
+                  <!--logo End-->
+                  <h4 class="logo-title ms-0 fw-bolder">Campus Connect</h4>
+                </a>
+                <h2 class="mb-2 text-center form-title">Registration</h2>
+                <p class="text-center form-text"></p>
+                <form method="POST" action="/pay">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="form-group">
+                        <label for="full-name" class="form-label">Full Name</label>
+                        <input id="name" type="text" name="name" class="form-control border-dark" placeholder=""
+                          required>
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="form-group">
+                        <label for="email" class="form-label">Your E-mail</label>
+                        <input id="email" type="email" name="email" class="form-control border-dark" placeholder=""
+                          required>
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="form-group">
+                        <label for="email">Your Mobile / WhatsApp Number</label>
+                        <input type="text" name="mobile_number" class="form-control border-dark" placeholder=""
+                          required>
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="form-group">
+                        <label for="semester">Select Semester</label>
+                        <select id="semester" name="semester" class="styled-select form-control border-dark" required>
+                          <option class="form-control" value="">Select Semester</option>
+                          <option class="form-control" value="1">Sem 1</option>
+                          <option class="form-control" value="2">Sem 2</option>
+                          <option class="form-control" value="3">Sem 3</option>
+                          <option class="form-control" value="4">Sem 4</option>
+                          <option class="form-control" value="5">Sem 5</option>
+                          <option class="form-control" value="6">Sem 6</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-dark">Register</button>
+                    </div>
+                  </div>
+                </form>
+                <div class="Registration-div mt-5">
+
+
+
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% for category, message in messages %}
+                  <p class="flash-message">{{ message }}</p>
+                  {% endfor %}
+                  {% endwith %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <form method="POST" action="/pay">
-        <div class="flex-column">
-          <label for="name">Your Name</label>
-          <div class="inputForm">
-            <svg height="20" viewBox="0 0 32 32" width="20" xmlns="http://www.w3.org/2000/svg">
-              <g id="Layer_3" data-name="Layer 3">
-                <path
-                  d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z">
-                </path>
-              </g>
-            </svg>
-            <input id="name" type="text" name="name" class="input" placeholder="Your Name" required>
-          </div>
-          <div class="flex-column">
-            <label for="email">Your E-mail</label>
-            <div class="inputForm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="none" role="img"
-                aria-label="email">
-                <title>Email</title>
-                <!-- outer envelope -->
-                <rect x="3" y="7" width="26" height="18" rx="2" ry="2" fill="currentColor" opacity="0.08" />
-                <!-- envelope outline -->
-                <path d="M4 8 H28 V24 H4 Z" fill="none" stroke="currentColor" stroke-width="1.6"
-                  stroke-linejoin="round" />
-                <!-- flap -->
-                <path d="M4 8 L16 17 L28 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
-              <input id="email" type="email" name="email" class="input" placeholder="Your Email" required>
-            </div>
-          </div>
-          <div class="flex-column">
-            <label for="email">Your Mobile Number</label>
-            <div class="inputForm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="none" role="img"
-                aria-label="mobile">
-                <title>Mobile</title>
-                <!-- outer phone shape -->
-                <rect x="9" y="3" width="14" height="26" rx="2" ry="2" stroke="currentColor" stroke-width="1.6"
-                  fill="none" />
-                <!-- screen -->
-                <rect x="11" y="6" width="10" height="18" fill="none" stroke="currentColor" stroke-width="1.2" />
-                <!-- home button -->
-                <circle cx="16" cy="26" r="1.2" fill="currentColor" />
-              </svg>
-              <input type="text" name="mobile_number" class="input" placeholder="Mobile / WhatsApp Number" required>
-            </div>
-          </div>
-          <div class="flex-column">
-            <label for="semester">Select Semester</label>
-            <div class="inputForm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="none" role="img"
-                aria-label="select-semester">
-                <title>Select Semester</title>
-              
-                <!-- outer select field -->
-                <rect x="2.5" y="6" width="27" height="20" rx="2.2" ry="2.2" stroke="currentColor" stroke-width="1.6" fill="none" />
-              
-                <!-- label line (simulates text) -->
-                <rect x="6" y="11" width="12" height="2" rx="1" fill="currentColor" opacity="0.12" />
-              
-                <!-- small secondary text line -->
-                <rect x="6" y="15.5" width="8" height="1.6" rx="0.8" fill="currentColor" opacity="0.08" />
-              
-                <!-- down chevron (dropdown arrow) -->
-                <path d="M22 12 L26 16 L22 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
-              <select id="semester" name="semester" class="styled-select" required>
-                <option class="input" value="">Select Semester</option>
-                <option class="input" value="1">Sem 1</option>
-                <option class="input" value="2">Sem 2</option>
-                <option class="input" value="3">Sem 3</option>
-                <option class="input" value="4">Sem 4</option>
-                <option class="input" value="5">Sem 5</option>
-                <option class="input" value="6">Sem 6</option>
-              </select>
-            </div>
-          </div>
-          <div class="mb-3">
-            <button type="submit" class="button-submit">Register</button>
-          </div>
-      </form>
-
-      {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
-      <p class="flash-message">{{ message }}</p>
-      {% endfor %}
-      {% endwith %}
     </div>
+  </section>
+</div>
 
-  </div>
-</body>
-
-</html>
+{% endblock %}

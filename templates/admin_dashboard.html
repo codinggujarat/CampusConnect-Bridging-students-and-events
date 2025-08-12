@@ -19,7 +19,7 @@
             <h4 class="logo-title">Campus Connect</h4>
         </a>
         <div class="sidebar-toggle bg-black" data-toggle="sidebar" data-active="true">
-            <i class="icon " >
+            <i class="icon ">
                 <svg width="20px" class="icon-20" viewBox="0 0 24 24">
                     <path fill="currentColor"
                         d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
@@ -27,7 +27,7 @@
             </i>
         </div>
         <div class="input-group search-input mt-5">
-          
+
         </div>
     </div>
 </nav>
@@ -45,7 +45,7 @@
                             <p>Connecting students with campus events, opportunities, and experiences in one place.</p>
                         </div>
                         <div>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -70,17 +70,20 @@
                         <div class="text-left">Total Students </div>
                         <div class="d-flex align-items-center justify-content-between mt-3">
                             <div>
-                                <h2 class="counter">{{ total_students  }}</h2>
+                                <h2 class="counter">{{ total_students }}</h2>
                             </div>
                             <div class="border  bg-warning rounded p-3">
 
-                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                         d="M11.9849 15.3462C8.11731 15.3462 4.81445 15.931 4.81445 18.2729C4.81445 20.6148 8.09636 21.2205 11.9849 21.2205C15.8525 21.2205 19.1545 20.6348 19.1545 18.2938C19.1545 15.9529 15.8735 15.3462 11.9849 15.3462Z"
-                                        stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                         d="M11.9849 12.0059C14.523 12.0059 16.5801 9.94779 16.5801 7.40969C16.5801 4.8716 14.523 2.81445 11.9849 2.81445C9.44679 2.81445 7.3887 4.8716 7.3887 7.40969C7.38013 9.93922 9.42394 11.9973 11.9525 12.0059H11.9849Z"
-                                        stroke="white" stroke-width="1.42857" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        stroke="white" stroke-width="1.42857" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
                                 </svg>
                             </div>
                         </div>
@@ -102,9 +105,9 @@
                                 <h2 class="counter">{{ total_present }}</h2>
                             </div>
                             <div class="border  bg-info rounded p-3">
-            
-                                <svg class="icon-20" xmlns="http://www.w3.org/2000/svg" width="20px" fill="none" viewBox="0 0 24 24"
-                                    stroke="white">
+
+                                <svg class="icon-20" xmlns="http://www.w3.org/2000/svg" width="20px" fill="none"
+                                    viewBox="0 0 24 24" stroke="white">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5 10l7-7m0 0l7 7m-7-7v18" />
                                 </svg>
@@ -145,19 +148,23 @@
                 </div>
             </div>
             <div class="row">
+                {% set colors = ['bg-primary', 'bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'] %}
                 {% for sem, stats in sem_stats.items() %}
-                <div class="col-lg-4 col-md-6 ">
+                <div class="col-lg-4 col-md-6">
                     <div class="card bg-white">
-                        <div class="card-body ">
-                            <h6 class=" pb-2">Semester {{ sem }}</h6>
-                            <div class="d-flex  justify-content-between align-items-center">
-                                <div class="bg-gray text-white rounded p-3">
+                        <div class="card-body">
+                            <h6 class="pb-2">Semester {{ sem }}</h6>
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <!-- Different background color for each semester -->
+                                <div class="{{ colors[(loop.index0) % 6] }} text-white rounded p-3">
                                     <svg class="icon-20" xmlns="http://www.w3.org/2000/svg" width="20px" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
                                 </div>
+
                                 <div class="text-center">
                                     Present:
                                     <h2 class="counter">{{ stats.present }}</h2>
@@ -166,6 +173,7 @@
                                     Absent:
                                     <h2 class="counter">{{ stats.absent }}</h2>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -173,9 +181,8 @@
                 {% endfor %}
             </div>
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="card bg-soft-success"
-                        style="box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;">
+                <div class="col-lg-6 " style="height: 100vh;">
+                    <div class="card bg-white">
                         <canvas id="semesterChart" id="extrachart"></canvas>
                     </div>
                 </div>

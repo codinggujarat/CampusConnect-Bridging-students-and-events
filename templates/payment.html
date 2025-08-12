@@ -63,20 +63,49 @@
 </head>
 
 <body>
-    <div class="Registration-div">
-        <div class="bannerimg">
-            <img src="/static/banner/hero.jpg" alt="">
-        </div>
-        <div class="form">
-            <div class="logo">
-                <h1>Campus Connect | Pay</h1>
+    {% extends "base.html" %}
+    {% block mainblock%}
+    <div class="wrapper">
+        <section class="login-content">
+            <div class="row m-0 align-items-center bg-white vh-100">
+                <div class="col-md-6 d-md-block d-none bg-primary p-0 mt-n1 vh-100 overflow-hidden">
+                    <img src="/static/banner/hero.jpg" class="img-fluid gradient-main animated-scaleX" alt="images">
+                </div>
+                <div class="col-md-6">
+                    <div class="row justify-content-center">
+                        <div class="col-md-10">
+                            <div class="card card-transparent auth-card shadow-none d-flex justify-content-center mb-0">
+                                <div class="card-body">
+                                    <a href="#" class="navbar-brand d-flex align-items-center mb-3">
+                                        <!--Logo start-->
+                                        <!--logo End-->
+                                    
+                                        <!--Logo start-->
+                                        <div class="logo-main">
+                                            <div class="logo-normal">
+                                    
+                                            </div>
+                                            <div class="logo-mini">
+                                    
+                                            </div>
+                                        </div>
+                                        <!--logo End-->
+                                        <h4 class="logo-title ms-0 fw-bolder">Campus Connect</h4>
+                                    </a>
+                                    <h2 class="mb-2 text-center form-title">Pay ₹100 to Join the Event</h2>
+                                    <p class="text-center form-text">Create your Hope UI account.</p>
+                                    <button id="rzp-button" class="button-submit">Pay Now</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="title">
-                <h3>Pay ₹100 to Join the Event</h2>
-            </div>
-            <button id="rzp-button" class="button-submit">Pay Now</button>
-        </div>
+        </section>
     </div>
+
+
     <form id="payment-success-form" action="/payment-success" method="POST" style="display: none;">
         <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
     </form>
@@ -100,6 +129,8 @@
             e.preventDefault();
         };
     </script>
+    {% endblock %}
+
 </body>
 
 </html>

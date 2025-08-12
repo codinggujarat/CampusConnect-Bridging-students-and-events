@@ -1,64 +1,84 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
+{% block title %}Campus Connect | Admin{% endblock %}
 
-<head>
-    <title>Campus Connect | Admin Login</title>
-    <link
-        href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,700&f[]=clash-grotesk@200,300,400,700&f[]=chillax@200,400,500,700&f[]=panchang@200,300,400,500,600&f[]=poppins@100,200,300&f[]=quicksand@300,400,500&display=swap"
-        rel="stylesheet">
 
-        <link rel="stylesheet" href="/static/css/style.css">
-</head>
 
-<body>
-    <div class="Registration-div">
-        <div class="bannerimg">
-            <img src="/static/banner/hero.jpg" alt="">
+{% block mainblock%}
+<style>
+    .flash-message {
+        font-family: 'Chillax', sans-serif;
+        color: #000;
+        text-align: center;
+    }
+</style>
+<div class="wrapper">
+    <section class="login-content">
+        <div class="row m-0 align-items-center bg-white vh-100">
+            <div class="col-md-6 d-md-block d-none bg-primary p-0 mt-n1 vh-100 overflow-hidden">
+                <img src="/static/banner/hero.jpg" class="img-fluid gradient-main animated-scaleX" alt="images">
+            </div>
+            <div class="col-md-6">
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <div class="card card-transparent auth-card shadow-none d-flex justify-content-center mb-0">
+                            <div class="card-body">
+                                <a href="#" class="navbar-brand d-flex align-items-center mb-3">
+                                    <!--Logo start-->
+                                    <!--logo End-->
+
+                                    <!--Logo start-->
+                                    <div class="logo-main">
+                                        <div class="logo-normal">
+
+                                        </div>
+                                        <div class="logo-mini">
+
+                                        </div>
+                                    </div>
+                                    <!--logo End-->
+                                    <h4 class="logo-title ms-0 fw-bolder">Campus Connect</h4>
+                                </a>
+                                <h2 class="mb-2 text-center form-title">Admin Login</h2>
+                                <p class="text-center form-text"></p>
+                                <form method="POST" class="form">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="username" class="form-label">Admin Username</label>
+                                                <input type="text" name="username"  placeholder="" class="form-control border-dark"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="password" class="form-label">Admin Password</label>
+                                                <input type="password" name="password" placeholder="" class="form-control border-dark"
+                                                    required>
+
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <button class="btn btn-dark">Login</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="Registration-div mt-5">
+
+
+
+                                    {% with messages = get_flashed_messages(with_categories=true) %}
+                                    {% for category, message in messages %}
+                                    <p class="flash-message">{{ message }}</p>
+                                    {% endfor %}
+                                    {% endwith %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <form method="POST" class="form">
-            <div class="logo">
-                <h1>Campus Connect | Admin</h1>
-            </div>
-            <div class="title">
-                <h2> Admin Login</h2>
-            </div>
-            <div class="flex-column">
-                <label>Username</label>
-                <div class="inputForm">
-                    <svg height="14" viewBox="0 0 32 32" width="20" xmlns="http://www.w3.org/2000/svg">
-                        <g id="Layer_3" data-name="Layer 3">
-                            <path
-                                d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z">
-                            </path>
-                        </g>
-                    </svg>
-                    <input type="text" name="username" placeholder="Admin Username" class="input" required>
-                </div>
-            </div>
-            <div class="flex-column">
-                <label>Password</label>
-                <div class="inputForm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="none"
-                        role="img" aria-label="password">
-                        <title>Password</title>
-                        <!-- lock body -->
-                        <rect x="6" y="14" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="1.6"
-                            fill="none" />
-                        <!-- shackle -->
-                        <path d="M10 14V10a6 6 0 0 1 12 0v4" fill="none" stroke="currentColor" stroke-width="1.6" />
-                        <!-- keyhole -->
-                        <circle cx="16" cy="21" r="1.5" fill="currentColor" />
-                        <path d="M16 22.5V25" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
-                    </svg>
-                    <input type="password" name="password" placeholder="Admin Password" class="input" required>
-                </div>
-            </div>
-            <div class="mb-2">
-                <button class="button-submit">Login</button>
-            </div>
-        </form>
-    </div>
+    </section>
+</div>
 
-</body>
-
-</html>
+{% endblock %}
