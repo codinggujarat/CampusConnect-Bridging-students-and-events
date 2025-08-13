@@ -1,4 +1,6 @@
 from flask import Flask, render_template,jsonify, request, redirect, url_for, flash, session, send_file
+from flask import Flask
+from flask_mail import Mail, Message
 import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
@@ -20,6 +22,16 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'default_secret')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Flask-Mail settings (AFTER app = Flask(__name__))
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+mail = Mail(app)  # initialize mail AFTER config
+
 db = SQLAlchemy(app)
 
 # Razorpay
@@ -32,6 +44,9 @@ razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 TWILIO_SID = os.getenv('TWILIO_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_WHATSAPP = os.getenv('TWILIO_WHATSAPP', 'whatsapp:+14155238886')  # Twilio sandbox
+twilio_client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
+
+# ------------------ Function to send confirmation ------------------
 
 def send_whatsapp_confirmation(mobile_number, name, event_id):
     try:
@@ -71,6 +86,8 @@ def send_whatsapp_confirmation(mobile_number, name, event_id):
 
     except Exception as e:
         print(f"Error sending WhatsApp message: {e}")
+
+
 
 # ----------------------------- Models -----------------------------
 class Student(db.Model):
