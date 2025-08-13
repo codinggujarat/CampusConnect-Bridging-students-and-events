@@ -7,8 +7,12 @@
 <style>
   .flash-message {
     font-family: 'Chillax', sans-serif;
-    color: #000;
+    color: #fff !important;
     text-align: center;
+    text-transform: uppercase;
+    background: #000;
+    padding: 10px;
+    font-size: 12px;
   }
 </style>
 <div class="wrapper">
@@ -21,7 +25,7 @@
         <div class="row justify-content-center">
           <div class="col-md-10">
             <div class="card card-transparent auth-card shadow-none d-flex justify-content-center mb-0">
-              <div class="card-body">
+              <div class="card-body wrapper-main">
                 <a href="#" class="navbar-brand d-flex align-items-center mb-3">
                   <!--Logo start-->
                   <!--logo End-->
@@ -36,38 +40,60 @@
                     </div>
                   </div>
                   <!--logo End-->
-                  <h4 class="logo-title ms-0 fw-bolder">Campus Connect</h4>
+                  <h4 class="logo-title ms-0 fw-bolder"></h4>
                 </a>
-                <h2 class="mb-2 text-center form-title">Registration</h2>
-                <p class="text-center form-text"></p>
+                <h2 class="mb-2 text-start form-title text-uppercase">Registration</h2>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                <p class="flash-message text-center ">{{ message }}</p>
+                {% endfor %}
+                {% endwith %}
                 <form method="POST" action="/pay">
-                  <div class="row">
+                  <div class=" dbl-field">
                     <div class="col-lg-12">
-                      <div class="form-group">
-                        <label for="full-name" class="form-label">Full Name</label>
+                      <div class="field input-field-login">
                         <input id="name" type="text" name="name" class="form-control border-dark" placeholder=""
                           required>
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                            stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <label for="full-name" class="form-label">What's Your Name?</label>
                       </div>
                     </div>
                     <div class="col-lg-12">
-                      <div class="form-group">
-                        <label for="email" class="form-label">Your E-mail</label>
+                      <div class="field input-field-login">
                         <input id="email" type="email" name="email" class="form-control border-dark" placeholder=""
                           required>
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <rect x="3" y="5" width="18" height="14" rx="2" stroke="#000000" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                          <path d="M3 7L12 13L21 7" stroke="#000000" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        </svg>
+                        <label for="email" class="form-label">What's Your E-mail?</label>
                       </div>
                     </div>
                     <div class="col-lg-12">
-                      <div class="form-group">
-                        <label for="email">Your Mobile / WhatsApp Number</label>
+                      <div class="form-group field input-field-login">
                         <input type="text" name="mobile_number" class="form-control border-dark" placeholder=""
                           required>
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M3 5.5C3 14.0604 9.93959 21 18.5 21C18.8862 21 19.2691 20.9859 19.6483 20.9581C20.0834 20.9262 20.3009 20.9103 20.499 20.7963C20.663 20.7019 20.8185 20.5345 20.9007 20.364C21 20.1582 21 19.9181 21 19.438V16.6207C21 16.2169 21 16.015 20.9335 15.842C20.8749 15.6891 20.7795 15.553 20.6559 15.4456C20.516 15.324 20.3262 15.255 19.9468 15.117L16.74 13.9509C16.2985 13.7904 16.0777 13.7101 15.8683 13.7237C15.6836 13.7357 15.5059 13.7988 15.3549 13.9058C15.1837 14.0271 15.0629 14.2285 14.8212 14.6314L14 16C11.3501 14.7999 9.2019 12.6489 8 10L9.36863 9.17882C9.77145 8.93713 9.97286 8.81628 10.0942 8.64506C10.2012 8.49408 10.2643 8.31637 10.2763 8.1317C10.2899 7.92227 10.2096 7.70153 10.0491 7.26005L8.88299 4.05321C8.745 3.67376 8.67601 3.48403 8.55442 3.3441C8.44701 3.22049 8.31089 3.12515 8.15802 3.06645C7.98496 3 7.78308 3 7.37932 3H4.56201C4.08188 3 3.84181 3 3.63598 3.09925C3.4655 3.18146 3.29814 3.33701 3.2037 3.50103C3.08968 3.69907 3.07375 3.91662 3.04189 4.35173C3.01413 4.73086 3 5.11378 3 5.5Z"
+                            stroke="#000000" stroke-width="2" stroke-linecap="" stroke-linejoin="" />
+                        </svg>
+                        <label for="mobile_number">What's Your Mobile / WhatsApp Number?</label>
                       </div>
                     </div>
                     <div class="col-lg-12">
-                      <div class="form-group">
-                        <label for="semester">Select Semester</label>
+                      <div class="form-group field input-field-login">
                         <select id="semester" name="semester" class="styled-select form-control border-dark" required>
-                          <option class="form-control" value="">Select Semester</option>
+                          <option class="form-control" value=""></option>
                           <option class="form-control" value="1">Sem 1</option>
                           <option class="form-control" value="2">Sem 2</option>
                           <option class="form-control" value="3">Sem 3</option>
@@ -75,23 +101,22 @@
                           <option class="form-control" value="5">Sem 5</option>
                           <option class="form-control" value="6">Sem 6</option>
                         </select>
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 3L1 9L12 15L23 9L12 3Z" stroke="#000000" stroke-width="1.5" fill="none" />
+                          <path d="M7 12V17C7 18.1046 9.68629 19 12 19C14.3137 19 17 18.1046 17 17V12" stroke="#000000"
+                            stroke-width="1.5" fill="none" />
+                          <path d="M23 9V14" stroke="#000000" stroke-width="1.5" fill="none" />
+                        </svg>
+                        <label for="semester">Select Semester</label>
                       </div>
                     </div>
-                    <div class="d-flex justify-content-center">
-                      <button type="submit" class="btn btn-dark">Register</button>
+                    <div class="d-flex justify-content-start">
+                      <button type="submit"
+                        class="btn btn-dark  flex align-items-center justify-content-start rounded-0 mt-3 text-uppercase fw-normal">Register</button>
                     </div>
                   </div>
                 </form>
-                <div class="Registration-div mt-5">
-
-
-
-                  {% with messages = get_flashed_messages(with_categories=true) %}
-                  {% for category, message in messages %}
-                  <p class="flash-message">{{ message }}</p>
-                  {% endfor %}
-                  {% endwith %}
-                </div>
               </div>
             </div>
           </div>
@@ -100,5 +125,16 @@
     </div>
   </section>
 </div>
+<style>
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    font-weight: normal;
+    font-size: 12px;
+    padding: 14px 20px !important;
+  }
+</style>
 
 {% endblock %}

@@ -138,7 +138,6 @@ def update_attendance_in_csv(uid):
 @app.route('/')
 def home():
     return render_template('register.html')
-
 @app.route('/pay', methods=['POST'])
 def pay():
     name = request.form['name']
@@ -147,8 +146,18 @@ def pay():
     mobile_number = request.form['mobile_number']
     unique_id = f"MSCCAIT2025-{str(uuid.uuid4())[:8]}"
 
+    # ✅ Check for duplicate email or mobile number
+    existing_student = Student.query.filter(
+        (Student.email == email) | (Student.mobile_number == mobile_number)
+    ).first()
+
+    if existing_student:
+        flash("This email or mobile number is already registered.", "danger")
+        return redirect(url_for('home'))
+
     if semester == 1:
-        student = Student(name=name, email=email, semester=semester, mobile_number=mobile_number, unique_id=unique_id)
+        student = Student(name=name, email=email, semester=semester,
+                          mobile_number=mobile_number, unique_id=unique_id)
         db.session.add(student)
         db.session.commit()
 
@@ -181,6 +190,14 @@ def payment_success():
     data = session.get('registration')
     if not data:
         flash("Session expired. Please register again.", "error")
+        return redirect(url_for('home'))
+
+    # ✅ Check for duplicate before saving (safety for direct POST requests)
+    existing_student = Student.query.filter(
+        (Student.email == data['email']) | (Student.mobile_number == data['mobile_number'])
+    ).first()
+    if existing_student:
+        flash("This email or mobile number is already registered.", "danger")
         return redirect(url_for('home'))
 
     razorpay_payment_id = request.form.get('razorpay_payment_id')
