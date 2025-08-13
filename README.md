@@ -36,15 +36,15 @@ A **full-stack Flask web application** for managing student event registrations 
 
 ## 🖼️ Screenshots
 
-> Replace with actual images after deployment:
-
 - ![Registration Form](screenshots/registration_form.png)
 - ![Event Payment Preview](screenshots//event_preview.png)
 - ![Payment Integration](screenshots/payment_integration.png)
 - ![PDF Confirmation](screenshots/pdf_confirmation.png)
-- ![QR Scanner](screenshots/qr_scanner.png)
 - ![Admin Dashboard](screenshots/admin_dashboard01.png)
 - ![Admin Dashboard](screenshots/admin_dashboard02.png)
+- ![Student Info](screenshots/stu_info.png)
+- ![QR Scanner](screenshots/qr_scanner.png)
+- ![QR Attendance](screenshots/Attendance_marked.png)
 
 ---
 
