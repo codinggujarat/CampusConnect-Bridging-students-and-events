@@ -147,7 +147,7 @@ Student Info
                         {% if student.refunded %}
                         <span class="badge bg-success">Refunded</span>
                         {% else %}
-                        <form action="{{ url_for('process_refund', student_id=student.id) }}" method="POST"
+                        <form action="{{ url_for('process_refund', student_id=student.id) }}" autocomplete="off" method="POST"
                             style="display:inline;">
                             <button type="submit" class="btn btn-primary btn-sm"
                                 onclick="return confirm('Refund ₹100 to {{ student.name }}?')">Refund</button>
