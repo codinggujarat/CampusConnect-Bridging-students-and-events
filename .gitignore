@@ -1,2 +1,50 @@
 .env
 tests.py
+# Byte-compiled / Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment
+myenv/
+venv/
+.env
+
+# VS Code settings
+.vscode/
+
+# Instance folder
+instance/
+
+# Python IDE / editor files
+*.swp
+*.swo
+*.idea/
+
+# MacOS files
+.DS_Store
+
+# Logs
+*.log
+
+# CSV / generated files
+static/csv_exports/
+static/qr_codes/
+static/pdfs/
+
+# Pytest cache
+.pytest_cache/
+
+# Ignore compiled / distribution files
+build/
+dist/
+*.egg-info/
+
+# Ignore coverage reports
+htmlcov/
+.coverage
+
+# Ignore temporary files
+*.tmp
+*.bak
+*.old

@@ -1,0 +1,5 @@
+Name,Email,Semester,Mobile Number,Event ID,Payment Status,Paid via,Amount,UPI ID,Transaction ID,Attendance
+Aman Nayak ,iam.amanayak@gmail.com,1,8320723850,MSCCAIT2025-0031105d,Paid,Razorpay,₹100,,pay_RBdF71CCxMSKdk,Present
+Aman Nayak ,manoj@gmail.com,1,0,MSCCAIT2025-371648eb,Paid,Razorpay,₹100,,pay_RBdTIa3V0TqVxc,Not Marked
+dev patel,dev@gmail.com,1,9016635417,MSCCAIT2025-0249185d,Paid,Razorpay,₹100,,pay_RBeR6c6DjNMeYt,Not Marked
+Aman Nayak ,devpatel@gmail.com,2,9205459135,MSCCAIT2025-835cdce8,Paid,Razorpay,₹100,N/A,pay_RBf1spslbHAnQs,Not Marked

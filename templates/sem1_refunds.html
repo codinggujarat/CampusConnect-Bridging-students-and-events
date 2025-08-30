@@ -1,0 +1,196 @@
+{% extends "sidebar.html" %}
+{% block title %}
+Student Info
+{% endblock %}
+
+<style>
+    .paid {
+        color: green;
+        font-weight: bold;
+    }
+
+    .not-paid {
+        color: red;
+        font-weight: bold;
+    }
+
+    .deleteform {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background-color: transparent;
+    }
+
+    .deleteform button {
+        padding: 0;
+        margin: 0;
+        border: 0;
+        outline: 0;
+    }
+
+    .refund-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+        transition: 0.2s ease-in-out;
+    }
+
+    .refund-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+{% block nav_bar %}
+<nav class="nav navbar navbar-expand-lg bg-white navbar-light iq-navbar">
+    <div class="container-fluid navbar-inner">
+        <a href="/admin-dashboard" class="navbar-brand">
+            <div class="logo-main">
+                <div class="logo-normal"></div>
+                <div class="logo-mini"></div>
+            </div>
+            <h4 class="logo-title">Campus Connect</h4>
+        </a>
+        <div class="sidebar-toggle bg-black" data-toggle="sidebar" data-active="true">
+            <i class="icon">
+                <svg width="20px" class="icon-20" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+                </svg>
+            </i>
+        </div>
+        <div class="input-group search-input mt-5"></div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block main_bar %}
+<div class="position-relative iq-banner">
+    <div class="iq-navbar-header" style="height: 300px;">
+        <div class="container-fluid iq-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="flex-wrap d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1>CampusConnect - Bridging students and events</h1>
+                            <p>Connecting students with campus events, opportunities, and experiences in one place.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="iq-header-img h-70">
+            <img src="/static/banner/hero.jpg" alt="header"
+                class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+            <h4 class="card-title">Student Info</h4>
+        </div>
+    </div>
+    <div class="table-responsive card-body">
+        <table id="datatable" class="table table-striped" data-toggle="data-table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Unique ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Semester</th>
+                    <th>Attendance</th>
+                    <th>UPI ID</th>
+                    <th>Transaction ID</th>
+                    <th>Payment Status</th>
+                    <th>Refund</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <!-- Unique ID -->
+                    <td>{{ student.unique_id }}</td>
+
+                    <!-- Name -->
+                    <td>{{ student.name }}</td>
+
+                    <!-- Email -->
+                    <td>{{ student.email }}</td>
+
+                    <!-- Mobile -->
+                    <td>{{ student.mobile_number }}</td>
+
+                    <!-- Semester -->
+                    <td>{{ student.semester }}</td>
+
+                    <!-- Attendance -->
+                    <td>
+                        {% if student.attended %}
+                        <span class="badge bg-success">Present</span>
+                        {% else %}
+                        <span class="badge bg-danger">Absent</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- UPI ID -->
+                    <td>{{ student.upi_id or "—" }}</td>
+
+                    <!-- Transaction ID -->
+                    <td>{{ student.transaction_id or "—" }}</td>
+
+                    <!-- Payment Status -->
+                    <td>
+                        {% if student.payment_status == "Paid" %}
+                        <span class="badge bg-success">Paid</span>
+                        {% elif student.payment_status == "Refunded" %}
+                        <span class="badge bg-primary">Refunded</span>
+                        {% else %}
+                        <span class="badge bg-danger">Not Paid</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Refund Button -->
+                    <td>
+                        {% if student.payment_status == "Paid" %}
+                        {% if student.refunded %}
+                        <span class="badge bg-success">Refunded</span>
+                        {% else %}
+                        <form action="{{ url_for('process_refund', student_id=student.id) }}" method="POST"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-warning btn-sm"
+                                onclick="return confirm('Refund ₹100 to {{ student.name }}?')">
+                                Refund
+                            </button>
+                        </form>
+                        {% endif %}
+                        {% else %}
+                        <span class="badge bg-secondary">N/A</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Delete Button -->
+                    <td>
+                        <form action="{{ url_for('delete_student', student_id=student.id) }}" method="POST"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Delete {{ student.name }}?')">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
