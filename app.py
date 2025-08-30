@@ -369,8 +369,8 @@ def scan_qr_page():
     return render_template('scan.html')
 
 # ---------------- Admin / Management ----------------
-ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
-ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', '1234')
+ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', '@291104AMANNAYAK')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', '@291104AMANNAYAK')
 
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
