@@ -5,6 +5,7 @@ import csv
 import qrcode
 import razorpay
 import random
+
 import pandas as pd
 from dotenv import load_dotenv
 from flask import (
@@ -17,7 +18,14 @@ from sqlalchemy import func
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet
 from twilio.rest import Client
-
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from collections import Counter
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from flask import jsonify
 # ---------------- Load env ----------------
 load_dotenv()
 
@@ -62,62 +70,40 @@ class Student(db.Model):
     email = db.Column(db.String(100))
     semester = db.Column(db.Integer)
     mobile_number = db.Column(db.String(15))
+    family_members = db.Column(db.Integer, default=0)  # NEW FIELD ✅
     attended = db.Column(db.Boolean, default=False)
     upi_id = db.Column(db.String(100))
-    transaction_id = db.Column(db.String(100))          # Razorpay payment_id
-    razorpay_order_id = db.Column(db.String(100))        # Razorpay order_id
-    payment_status = db.Column(db.String(50))            # "Paid" | "Refunded" | "Failed"
-    refund_id = db.Column(db.String(100))                # Razorpay refund id
+    transaction_id = db.Column(db.String(100))
+    razorpay_order_id = db.Column(db.String(100))
+    payment_status = db.Column(db.String(50))
+    refund_id = db.Column(db.String(100))
     refunded = db.Column(db.Boolean, default=False)
 
 # ---------------- CSV paths & helpers ----------------
 CSV_PATH = os.path.join('static', 'csv_exports', 'registrations.csv')
 os.makedirs(os.path.dirname(CSV_PATH), exist_ok=True)
 
-def append_to_csv(name, email, semester, unique_id, mobile_number, upi_id=None, transaction_id=None, status="Paid"):
-    """
-    Append a registration entry to CSV.
-    Ensures correct headers on top if the file doesn't exist.
-    """
-    # Check if CSV exists
-    file_exists = os.path.isfile(CSV_PATH)
+def append_to_csv(name, email, semester, unique_id, mobile_number, family_members, total_amount, upi_id=None, transaction_id=None, status="Pending"):
+    csv_dir = "static/csv"
+    os.makedirs(csv_dir, exist_ok=True)
+    csv_path = os.path.join(csv_dir, "registrations.csv")
 
-    # Ensure directory exists
-    os.makedirs(os.path.dirname(CSV_PATH), exist_ok=True)
+    file_exists = os.path.isfile(csv_path)
 
-    # Open CSV in append mode
-    with open(CSV_PATH, mode='a', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
+    with open(csv_path, "a", newline="", encoding="utf-8") as csvfile:
+        writer = csv.writer(csvfile)
 
         # Write header if file doesn't exist
         if not file_exists:
             writer.writerow([
-                'Name',
-                'Email',
-                'Semester',
-                'Mobile Number',
-                'Event ID',
-                'Payment Status',
-                'Paid via',
-                'Amount',
-                'UPI ID',
-                'Transaction ID',
-                'Attendance'
+                "Name", "Email", "Semester", "Mobile No", "Family Members",
+                "Total Amount (₹)", "Unique ID", "UPI ID",
+                "Transaction ID", "Payment Status"
             ])
 
-        # Write student row
         writer.writerow([
-            name,
-            email,
-            semester,
-            mobile_number,
-            unique_id,
-            status,
-            'Razorpay',
-            '₹100',
-            upi_id or 'N/A',
-            transaction_id or 'N/A',
-            'Not Marked'
+            name, email, semester, mobile_number, family_members,
+            total_amount, unique_id, upi_id, transaction_id, status
         ])
 
 
@@ -200,42 +186,37 @@ def generate_qr_code(uid):
     img = qrcode.make(f'{uid}')
     img.save(path)
 
-def generate_pdf(name, email, semester, uid, paid=False, upi_id=None, transaction_id=None):
-    folder = os.path.join('static', 'pdfs')
-    os.makedirs(folder, exist_ok=True)
-    filepath = os.path.join(folder, f'{uid}.pdf')
-    qr_path = os.path.join('static', 'qr_codes', f'{uid}.png')
+def generate_pdf(name, email, semester, unique_id, family_members, total_amount, paid=True, upi_id=None, transaction_id=None):
+    # Define PDF path
+    pdf_dir = "static/pdfs"
+    os.makedirs(pdf_dir, exist_ok=True)
+    pdf_path = os.path.join(pdf_dir, f"{unique_id}.pdf")
 
-    doc = SimpleDocTemplate(filepath)
-    styles = getSampleStyleSheet()
-    flowables = []
+    c = canvas.Canvas(pdf_path, pagesize=A4)
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(200, 800, "🎉 Event Registration Receipt 🎉")
 
-    flowables.append(Paragraph("🎉 Event Registration Confirmation", styles['Title']))
-    flowables.append(Spacer(1, 12))
-    flowables.append(Paragraph(f"Name: {name}", styles['Normal']))
-    flowables.append(Paragraph(f"Email: {email}", styles['Normal']))
-    flowables.append(Paragraph(f"Semester: {semester}", styles['Normal']))
-    flowables.append(Paragraph(f"Event ID: {uid}", styles['Normal']))
-    flowables.append(Spacer(1, 12))
+    # Student Info
+    c.setFont("Helvetica", 12)
+    c.drawString(100, 750, f"Name: {name}")
+    c.drawString(100, 730, f"Email: {email}")
+    c.drawString(100, 710, f"Semester: {semester}")
+    c.drawString(100, 690, f"Family Members: {family_members}")
+    c.drawString(100, 670, f"Total Paid: ₹{total_amount}")
+    c.drawString(100, 650, f"Unique ID: {unique_id}")
 
-    if paid:
-        flowables.append(Paragraph("✅ Payment Status: Paid", styles['Normal']))
-        flowables.append(Paragraph("💳 Paid via: Razorpay", styles['Normal']))
-        flowables.append(Paragraph(f"📌 Transaction ID: {transaction_id or 'N/A'}", styles['Normal']))
-        flowables.append(Paragraph(f"🆔 UPI ID: {upi_id or 'N/A'}", styles['Normal']))
-        flowables.append(Paragraph("📌 Amount: ₹100", styles['Normal']))
-    else:
-        flowables.append(Paragraph("ℹ️ Registration recorded.", styles['Normal']))
+    if upi_id:
+        c.drawString(100, 630, f"UPI ID: {upi_id}")
+    if transaction_id:
+        c.drawString(100, 610, f"Transaction ID: {transaction_id}")
 
-    if semester == 1:
-        flowables.append(Paragraph("ℹ️ Sem 1 students are eligible for a ₹100 refund after the event (admin processed).", styles['Normal']))
-    flowables.append(Spacer(1, 12))
+    c.setFont("Helvetica-Bold", 12)
+    status = "Payment Successful ✅" if paid else "Payment Pending ❌"
+    c.drawString(100, 580, f"Status: {status}")
 
-    flowables.append(Paragraph("Scan this QR to verify entry:", styles['Normal']))
-    if os.path.exists(qr_path):
-        flowables.append(Image(qr_path, width=150, height=150))
-
-    doc.build(flowables)
+    c.showPage()
+    c.save()
+    return pdf_path
 
 # ---------------- Routes ----------------
 @app.route('/')
@@ -249,13 +230,23 @@ def pay():
     email = request.form.get('email')
     semester = int(request.form.get('semester', 1))
     mobile_number = request.form.get('mobile_number')
+    family_members = int(request.form.get('family_members', 0))  # ✅ New field
     unique_id = f"MSCCAIT2025-{str(uuid.uuid4())[:8]}"
 
-    # duplicate check
+    # Validation
+    if family_members < 0 or family_members > 5:
+        flash("Family members must be between 0 and 5.", "danger")
+        return redirect(url_for('home'))
+
+    # Duplicate check
     existing = Student.query.filter((Student.email == email) | (Student.mobile_number == mobile_number)).first()
     if existing:
         flash("This email or mobile number is already registered.", "danger")
         return redirect(url_for('home'))
+
+    # Calculate total amount
+    total_people = 1 + family_members
+    total_amount = total_people * 100  # ₹100 per person
 
     # Save registration temporarily in session
     session['registration'] = {
@@ -263,16 +254,18 @@ def pay():
         'email': email,
         'semester': semester,
         'mobile_number': mobile_number,
-        'unique_id': unique_id
+        'unique_id': unique_id,
+        'family_members': family_members,
+        'total_amount': total_amount
     }
 
-    # Create Razorpay order (₹100 -> 10000 paise)
-    order = razorpay_client.order.create(dict(amount=10000, currency='INR', payment_capture='1'))
+    # Create Razorpay order
+    order = razorpay_client.order.create(dict(amount=total_amount * 100, currency='INR', payment_capture='1'))
     session['registration']['razorpay_order_id'] = order['id']
 
     return render_template('payment.html',
                            order_id=order['id'],
-                           amount=100,
+                           amount=total_amount,
                            razorpay_key=RAZORPAY_KEY_ID,
                            name=name,
                            email=email)
@@ -285,13 +278,6 @@ def payment_success():
         flash("Session expired. Please register again.", "danger")
         return redirect(url_for('home'))
 
-    # prevent duplicates
-    existing = Student.query.filter((Student.email == data['email']) | (Student.mobile_number == data['mobile_number'])).first()
-    if existing:
-        flash("This email or mobile number is already registered.", "danger")
-        session.pop('registration', None)
-        return redirect(url_for('home'))
-
     razorpay_payment_id = request.form.get('razorpay_payment_id')
     upi_id = request.form.get('upi_id')  # optional
 
@@ -300,6 +286,7 @@ def payment_success():
         email=data['email'],
         semester=data['semester'],
         mobile_number=data['mobile_number'],
+        family_members=data['family_members'],
         unique_id=data['unique_id'],
         upi_id=upi_id if upi_id else "N/A",
         transaction_id=razorpay_payment_id,
@@ -311,14 +298,33 @@ def payment_success():
     db.session.commit()
     session.pop('registration', None)
 
-    # generate QR, PDF, CSV, WhatsApp
+    # Generate QR, PDF, CSV, WhatsApp
     generate_qr_code(student.unique_id)
-    generate_pdf(student.name, student.email, student.semester, student.unique_id, paid=True,
-                 upi_id=student.upi_id, transaction_id=student.transaction_id)
-    append_to_csv(student.name, student.email, student.semester, student.unique_id,
-                  student.mobile_number, upi_id=student.upi_id, transaction_id=student.transaction_id, status="Paid")
+    generate_pdf(
+        student.name,
+        student.email,
+        student.semester,
+        student.unique_id,
+        student.family_members,
+        (1 + student.family_members) * 100,  # total amount
+        paid=True,
+        upi_id=student.upi_id,
+        transaction_id=student.transaction_id
+    )
 
-    # WhatsApp
+    append_to_csv(
+        student.name,
+        student.email,
+        student.semester,
+        student.unique_id,
+        student.mobile_number,
+        student.family_members,
+        (1 + student.family_members) * 100,
+        upi_id=student.upi_id,
+        transaction_id=student.transaction_id,
+        status="Paid"
+    )
+
     send_whatsapp_confirmation(student.mobile_number, student.name, student.unique_id)
 
     flash("Payment successful! Download QR & PDF from the next page.", "success")
@@ -469,7 +475,7 @@ def process_refund(student_id):
     try:
         # Razorpay Refund API Call
         refund = razorpay_client.payment.refund(student.transaction_id, {
-            "amount": 10000  # Amount in paise (₹100)
+            "amount": (1 + student.family_members) * 10000  # Refund student + family ✅
         })
 
         # Update student record after refund success
@@ -517,112 +523,101 @@ def _clean_csv(file_path):
         return False
 
 
-@app.route('/chart_data')
-def chart_data():
+# --------------------------------------
+# 1. Export PDF + CSV (With Family Members + Total Amount)
+# --------------------------------------
+@app.route('/export/pdf')
+def export_pdf():
+    file_path = os.path.join(app.root_path, 'static', 'pdf_exports', 'students_report.pdf')
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+    students = Student.query.all()
+
+    data = [["ID", "Name", "Semester", "Family Members", "Payment Status", "Amount"]]
+    total_amount = 0
+    total_family_members = 0
+
+    for s in students:
+        amount = 100 if s.payment_status == "Paid" else 0
+        total_amount += amount
+        total_family_members += s.family_members
+        data.append([
+            s.id,
+            s.name,
+            s.semester,
+            s.family_members,
+            s.payment_status,
+            f"₹{amount}"
+        ])
+
+    # Add totals at the end
+    data.append(["", "", "", f"Total Family: {total_family_members}", "Total Collected:", f"₹{total_amount}"])
+
+    pdf = SimpleDocTemplate(file_path, pagesize=A4)
+    style = getSampleStyleSheet()
+    table = Table(data)
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("GRID", (0, 0), (-1, -1), 1, colors.grey),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 8)
+    ]))
+    pdf.build([Paragraph("Students Report", style["Title"]), table])
+    return send_file(file_path, as_attachment=True)
+
+@app.route('/export/csv')
+def export_csv():
     file_path = os.path.join(app.root_path, 'static', 'csv_exports', 'registrations.csv')
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-    # If CSV missing — return empty chart payload
-    if not os.path.exists(file_path):
-        app.logger.info("chart_data: CSV not found")
-        return jsonify({"labels": [], "values": [], "legend": "Students per Semester"})
+    students = Student.query.all()
+    with open(file_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["ID", "Name", "Semester", "Family Members", "Payment Status", "Amount"])
+        for s in students:
+            amount = 100 if s.payment_status == "Paid" else 0
+            writer.writerow([s.id, s.name, s.semester, s.family_members, s.payment_status, amount])
 
-    # Attempt to clean CSV to avoid parser errors
-    _clean_csv(file_path)
+    return send_file(file_path, as_attachment=True)
 
-    # Try reading with pandas first (robustly)
-    try:
-        try:
-            df = pd.read_csv(file_path, header=0, on_bad_lines='skip')
-        except TypeError:
-            # older pandas fallback
-            df = pd.read_csv(file_path, header=0, engine='python', error_bad_lines=False)
-
-        # Normalize column names for detection
-        cols = [str(c).strip().lower() for c in df.columns]
-
-        # Determine semester column index:
-        sem_idx = None
-        if 'semester' in cols:
-            sem_idx = cols.index('semester')
-            sem_series = pd.to_numeric(df.iloc[:, sem_idx], errors='coerce').dropna().astype(int)
-        else:
-            # fallback to 3rd column (index 2) if exists (your CSV used 3rd column originally)
-            if df.shape[1] >= 3:
-                sem_series = pd.to_numeric(df.iloc[:, 2], errors='coerce').dropna().astype(int)
-            else:
-                app.logger.warning("chart_data: no semester column and not enough columns")
-                return jsonify({"labels": [], "values": [], "legend": "Students per Semester"})
-
-        if sem_series.empty:
-            app.logger.info("chart_data: semester column empty after cleaning")
-            return jsonify({"labels": [], "values": [], "legend": "Students per Semester"})
-
-        semester_counts = sem_series.value_counts().sort_index()
-        labels = [f"Sem {int(s)}" for s in semester_counts.index.tolist()]
-        values = semester_counts.values.tolist()
-
-        return jsonify({"labels": labels, "values": values, "legend": "Students per Semester"})
-
-    except Exception as e_pandas:
-        # Pandas failed — do tolerant manual parse
-        app.logger.exception("chart_data: pandas read failed, falling back to manual parse")
-        try:
-            semesters = []
-            with open(file_path, 'r', encoding='utf-8', newline='') as f:
-                import csv
-                reader = csv.reader(f)
-                headers = next(reader, None)
-                sem_idx = None
-                if headers:
-                    hdrs = [h.strip().lower() for h in headers]
-                    if 'semester' in hdrs:
-                        sem_idx = hdrs.index('semester')
-                if sem_idx is None:
-                    sem_idx = 2  # fallback to 3rd column
-
-                for row in reader:
-                    if len(row) > sem_idx:
-                        val = row[sem_idx].strip()
-                        if val != '':
-                            try:
-                                si = int(float(val))
-                                semesters.append(si)
-                            except:
-                                continue
-
-            if not semesters:
-                return jsonify({"labels": [], "values": [], "legend": "Students per Semester"})
-
-            counter = Counter(semesters)
-            keys = sorted(counter.keys())
-            labels = [f"Sem {k}" for k in keys]
-            values = [counter[k] for k in keys]
-            return jsonify({"labels": labels, "values": values, "legend": "Students per Semester"})
-        except Exception as e_manual:
-            app.logger.exception("chart_data: manual parse also failed")
-            return jsonify({"labels": [], "values": [], "legend": "Students per Semester"})
-        
+# --------------------------------------
+# 2. Update Dashboard Data API
+# --------------------------------------
 @app.route('/dashboard_data')
 def dashboard_data():
-    paid_not_refunded = db.session.query(func.count(Student.id))\
-        .filter(Student.payment_status == "Paid", Student.refunded == False)\
-        .scalar() or 0
-
-    refunded_count = db.session.query(func.count(Student.id))\
-        .filter(Student.refunded == True)\
-        .scalar() or 0
-
+    # Count total students (registrations)
     total_students = db.session.query(func.count(Student.id)).scalar() or 0
-    total_amount_collected = paid_not_refunded * 100
-    total_amount_refunded = refunded_count * 100
 
+    # Paid but NOT refunded
+    paid_not_refunded = db.session.query(func.count(Student.id)) \
+        .filter(Student.payment_status == "Paid", Student.refunded == False) \
+        .scalar() or 0
+
+    # Count refunded students
+    refunded_count = db.session.query(func.count(Student.id)) \
+        .filter(Student.refunded == True) \
+        .scalar() or 0
+
+    # ✅ Calculate total collected based on family members + student
+    total_amount_collected = db.session.query(
+        func.sum((Student.family_members + 1) * 100)
+    ).filter(Student.payment_status == "Paid", Student.refunded == False).scalar() or 0
+
+    # ✅ Calculate refunded amount based on family members + student
+    total_amount_refunded = db.session.query(
+        func.sum((Student.family_members + 1) * 100)
+    ).filter(Student.refunded == True).scalar() or 0
+
+    # Semester-wise counts
     sem_counts = {}
     for sem in range(1, 7):
-        count = db.session.query(func.count(Student.id))\
+        count = db.session.query(func.count(Student.id)) \
             .filter(Student.semester == sem).scalar() or 0
         sem_counts[f"Sem{sem}"] = count
 
-    # Flat arrays for accurate numbers
+    # ✅ Data for charts (flat arrays)
     total_students_values = [total_students] * 7
     paid_not_refunded_values = [paid_not_refunded] * 7
     total_amount_collected_values = [total_amount_collected] * 7
@@ -643,8 +638,64 @@ def dashboard_data():
         "total_amount_refunded_values": total_amount_refunded_values
     })
 
+
+# --------------------------------------
+# 3. Chart Data API (Semester-wise Students)
+# --------------------------------------
+@app.route('/chart_data')
+def chart_data():
+    try:
+        # Semester-wise students & family members
+        semester_data = (
+            db.session.query(
+                Student.semester,
+                func.count(Student.id).label("students"),
+                func.coalesce(func.sum(Student.family_members), 0).label("family")
+            )
+            .group_by(Student.semester)
+            .order_by(Student.semester)
+            .all()
+        )
+
+        if not semester_data:
+            return jsonify({
+                "labels": [],
+                "students": [],
+                "family_members": [],
+                "total_family": 0,
+                "legend_students": "Students per Semester",
+                "legend_family": "Family Members per Semester"
+            })
+
+        labels = [f"Sem {row[0]}" for row in semester_data]
+        students = [row[1] for row in semester_data]
+        family_members = [row[2] for row in semester_data]
+        total_family = sum(family_members)
+
+        return jsonify({
+            "labels": labels,
+            "students": students,
+            "family_members": family_members,
+            "total_family": total_family,
+            "legend_students": "Students per Semester",
+            "legend_family": "Family Members per Semester"
+        })
+
+    except Exception as e:
+        print("Chart data error:", e)
+        return jsonify({
+            "labels": [],
+            "students": [],
+            "family_members": [],
+            "total_family": 0,
+            "legend_students": "Students per Semester",
+            "legend_family": "Family Members per Semester"
+        })
+
 # ---------------- Init & Run ----------------
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+
+        

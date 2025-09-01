@@ -64,10 +64,11 @@
 <div class="conatiner-fluid content-inner mt-5 py-0">
     <div>
         <div class="row">
+
             <div class="col-lg-4 col-md-6">
                 <div class="card bg-white">
                     <div class="card-body">
-                        <div class="text-left">Total Students </div>
+                        <div class="text-left text-uppercase">Total Students </div>
                         <div class="d-flex align-items-center justify-content-between mt-3">
                             <div>
                                 <h2 class="counter">{{ total_students }}</h2>
@@ -99,7 +100,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="card bg-white">
                     <div class="card-body">
-                        <div class="text-left">Total Students Present</div>
+                        <div class="text-left text-uppercase">Total Students Present</div>
                         <div class="d-flex align-items-center justify-content-between mt-3">
                             <div>
                                 <h2 class="counter">{{ total_present }}</h2>
@@ -125,7 +126,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="card bg-white">
                     <div class="card-body">
-                        <div class="text-left">Total Students Absent</div>
+                        <div class="text-left text-uppercase">Total Students Absent</div>
                         <div class="d-flex align-items-center justify-content-between mt-3">
                             <div>
                                 <h2 class="counter">{{ total_absent }}</h2>
@@ -147,351 +148,327 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                {% set colors = ['bg-soft-primary', 'bg-soft-success', 'bg-soft-danger', 'bg-soft-warning', 'bg-soft-info', 'bg-soft-secondary'] %}
-                {% for sem, stats in sem_stats.items() %}
-                <div class="col-lg-4 col-md-6">
-                    <div class="card bg-white">
-                        <div class="card-body">
-                            <h6 class="pb-2">Semester {{ sem }}</h6>
-                            <div class="d-flex justify-content-between align-items-center">
-
-                                <!-- Different background color for each semester -->
-                                <div class="{{ colors[(loop.index0) % 6] }}  rounded p-3">
-                                    <svg class="icon-20" xmlns="http://www.w3.org/2000/svg" width="20px" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
+            {% set colors = ['bg-soft-primary', 'bg-soft-success', 'bg-soft-danger', 'bg-soft-warning',
+            'bg-soft-info', 'bg-soft-secondary'] %}
+            {% for sem, stats in sem_stats.items() %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="mb-2 text-uppercase">Semester {{ sem }}</p>
+                        <div class="mt-3">
+                            <div class="pb-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <p class="mb-0 text-uppercase"> Present:</p>
+                                    <h4>{{ stats.present }}</h4>
                                 </div>
-
-                                <div class="text-center">
-                                    Present:
-                                    <h2 class="counter">{{ stats.present }}</h2>
+                                <div class="progress bg-soft-info shadow-none w-100" style="height: 10px">
+                                    <div class="progress-bar bg-info" data-toggle="progress-bar" role="progressbar"
+                                        aria-valuenow="{{ stats.present }}" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <div class="text-center">
-                                    Absent:
-                                    <h2 class="counter">{{ stats.absent }}</h2>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <p class="mb-0 text-uppercase"> Absent:</p>
+                                    <h4>{{ stats.absent }}</h4>
                                 </div>
-
+                                <div class="progress bg-soft-danger shadow-none w-100" style="height: 10px">
+                                    <div class="progress-bar bg-danger" data-toggle="progress-bar" role="progressbar"
+                                        aria-valuenow="{{ stats.absent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="card bg-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="bg-soft-primary text-black p-3 rounded">
+                                <svg class="icon-25" width="25" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21.6389 14.3957H17.5906C16.1042 14.3948 14.8993 13.1909 14.8984 11.7045C14.8984 10.218 16.1042 9.01409 17.5906 9.01318H21.6389"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M18.049 11.6429H17.7373" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.74766 3H16.3911C19.2892 3 21.6388 5.34951 21.6388 8.24766V15.4247C21.6388 18.3229 19.2892 20.6724 16.3911 20.6724H7.74766C4.84951 20.6724 2.5 18.3229 2.5 15.4247V8.24766C2.5 5.34951 4.84951 3 7.74766 3Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M7.03516 7.5382H12.4341" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                            <div class="mt-3">
+                                <div>
+                                    <h3 class="counter text-end" id="totalAmount"></h3>
+                                </div>
+                                <span class="text-uppercase">Total Amount Paid</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="bg-soft-info text-black p-3 rounded">
+                                  <svg class="icon-25" width="25" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21.6389 14.3957H17.5906C16.1042 14.3948 14.8993 13.1909 14.8984 11.7045C14.8984 10.218 16.1042 9.01409 17.5906 9.01318H21.6389"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M18.049 11.6429H17.7373" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.74766 3H16.3911C19.2892 3 21.6388 5.34951 21.6388 8.24766V15.4247C21.6388 18.3229 19.2892 20.6724 16.3911 20.6724H7.74766C4.84951 20.6724 2.5 18.3229 2.5 15.4247V8.24766C2.5 5.34951 4.84951 3 7.74766 3Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M7.03516 7.5382H12.4341" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+
+                            </div>
+                            <div class="mt-3">
+                                <div>
+                                    <h3 class="counter text-end" id="paidStudents"></h3>
+                                </div>
+                                <span class="text-uppercase">Paid Students</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="row">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="card bg-soft-primary">
-                            <div class="card-body">
-                                <div class="d-flex flex-column align-items-between">
-                                    <div>
-                                        <div class="d-flex">
-                                            <div class="bg-primary text-white p-3 rounded">
-                                                <svg class="icon-25" width="25" viewBox="0 0 24 24" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M21.6389 14.3957H17.5906C16.1042 14.3948 14.8993 13.1909 14.8984 11.7045C14.8984 10.218 16.1042 9.01409 17.5906 9.01318H21.6389"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round"></path>
-                                                    <path d="M18.049 11.6429H17.7373" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round"></path>
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M7.74766 3H16.3911C19.2892 3 21.6388 5.34951 21.6388 8.24766V15.4247C21.6388 18.3229 19.2892 20.6724 16.3911 20.6724H7.74766C4.84951 20.6724 2.5 18.3229 2.5 15.4247V8.24766C2.5 5.34951 4.84951 3 7.74766 3Z"
-                                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round"></path>
-                                                    <path d="M7.03516 7.5382H12.4341" stroke="currentColor"
-                                                        stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <span>Total Amount Paid</span>
-                                        <div>
-                                            <h3 class="counter" id="totalAmount"></h3>
-                                        </div>
-                                    </div>
-                                </div>
+            <div class="col-md-4">
+                <div class="card bg-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="bg-soft-secondary text-black p-3 rounded">
+                                  <svg class="icon-25" width="25" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21.6389 14.3957H17.5906C16.1042 14.3948 14.8993 13.1909 14.8984 11.7045C14.8984 10.218 16.1042 9.01409 17.5906 9.01318H21.6389"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M18.049 11.6429H17.7373" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.74766 3H16.3911C19.2892 3 21.6388 5.34951 21.6388 8.24766V15.4247C21.6388 18.3229 19.2892 20.6724 16.3911 20.6724H7.74766C4.84951 20.6724 2.5 18.3229 2.5 15.4247V8.24766C2.5 5.34951 4.84951 3 7.74766 3Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M7.03516 7.5382H12.4341" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 ">
-                        <div class="card bg-soft-success">
-                            <div class="card-body">
-                                <div class="d-flex flex-column align-items-between">
-                                    <div>
-                                        <div class="d-flex">
-                                            <div class="bg-success text-white p-3 rounded">
-                                                <svg class="icon-25" xmlns="http://www.w3.org/2000/svg" width="25px"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <span>Total Students</span>
-                                        <div>
-                                            <h3 class="counter" id="totalStudents"></h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card bg-soft-info">
-                            <div class="card-body">
-                                <div class="d-flex flex-column align-items-between">
-                                    <div>
-                                        <div class="d-flex">
-                                            <div class="bg-info text-white p-3 rounded">
-                                                <svg class="icon-25" xmlns="http://www.w3.org/2000/svg" width="25px"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <span>Paid Students</span>
-                                        <div>
-                                            <h3 class="counter" id="paidStudents"></h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card bg-soft-warning">
-                            <div class="card-body">
-                                <div class="d-flex flex-column align-items-between">
-                                    <div>
-                                        <div class="d-flex">
-                                            <div class="bg-warning text-white p-3 rounded">
-                                                <svg class="icon-25" xmlns="http://www.w3.org/2000/svg" width="25px"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <span>Total Amount Collected (₹)</span>
-                                        <div>
-                                            <h3 class="counter" id="totalAmountCollected"></h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card bg-soft-secondary">
-                            <div class="card-body">
-                                <div class="d-flex flex-column align-items-between">
-                                    <div>
-                                        <div class="d-flex">
-                                            <div class="bg-secondary text-white p-3 rounded">
-                                                <svg class="icon-25" xmlns="http://www.w3.org/2000/svg" width="25px"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <span>Refunded Students</span>
-                                        <div>
-                                            <h3 class="counter" id="refundedStudents"></h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-3">
-                        <div class="card bg-soft-danger">
-                            <div class="card-body">
-                                <div class="d-flex flex-column align-items-between">
-                                    <div>
-                                        <div class="d-flex">
-                                            <div class="bg-danger text-white p-3 rounded">
-                                                <svg class="icon-25" xmlns="http://www.w3.org/2000/svg" width="25px"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <span>Total Amount Refunded (₹)</span>
-                                        <div>
-                                            <h3 class="counter" id="totalAmountRefunded"></h3>
-                                        </div>
-                                    </div>
+                            <div class="mt-3">
+                                <div>
+                                    <h3 class="counter text-end" id="refundedStudents"></h3>
                                 </div>
+                                <span class="text-uppercase">Refunded Students</span>
                             </div>
                         </div>
                     </div>
-
                 </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-white ">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="bg-soft-warning text-black p-3 rounded">
+                                  <svg class="icon-25" width="25" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21.6389 14.3957H17.5906C16.1042 14.3948 14.8993 13.1909 14.8984 11.7045C14.8984 10.218 16.1042 9.01409 17.5906 9.01318H21.6389"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M18.049 11.6429H17.7373" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.74766 3H16.3911C19.2892 3 21.6388 5.34951 21.6388 8.24766V15.4247C21.6388 18.3229 19.2892 20.6724 16.3911 20.6724H7.74766C4.84951 20.6724 2.5 18.3229 2.5 15.4247V8.24766C2.5 5.34951 4.84951 3 7.74766 3Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M7.03516 7.5382H12.4341" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                            <div class="mt-3">
+                                <div>
+                                    <h3 class="counter text-end" id="totalAmountCollected"></h3>
+                                </div>
+                                <span class="text-uppercase">Total Amount Collected (₹)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="bg-soft-danger text-black p-3 rounded">
+                                  <svg class="icon-25" width="25" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21.6389 14.3957H17.5906C16.1042 14.3948 14.8993 13.1909 14.8984 11.7045C14.8984 10.218 16.1042 9.01409 17.5906 9.01318H21.6389"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M18.049 11.6429H17.7373" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.74766 3H16.3911C19.2892 3 21.6388 5.34951 21.6388 8.24766V15.4247C21.6388 18.3229 19.2892 20.6724 16.3911 20.6724H7.74766C4.84951 20.6724 2.5 18.3229 2.5 15.4247V8.24766C2.5 5.34951 4.84951 3 7.74766 3Z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path d="M7.03516 7.5382H12.4341" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                            <div class="mt-3">
+                                <div>
+                                    <h3 class="counter text-end" id="totalAmountRefunded"></h3>
+                                </div>
+                                <span class="text-uppercase">Total Amount Refunded (₹)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-lg-12">
+                <div class="mt-5 card p-4">
+                    <h3 class="text-start  text-uppercase">Students & Family Members Overview</h3>
 
+                    <div class="row mt-4">
+                        <!-- Bar Chart -->
+                        <div class="col-md-7">
+                            <div class=" p-3 ">
+                                <h5 class="text-start text-uppercase">Students & Family Members Per Semester
+                                </h5>
+                                <canvas id="studentsFamilyChart" height="180"></canvas>
+                            </div>
+                        </div>
 
-                <div class="col-lg-12 " style="height: 100vh;">
-                    <div class="card bg-white">
-                        <canvas id="semesterChart"></canvas>
+                        <!-- Pie Chart -->
+                        <div class="col-md-5">
+                            <div class=" p-3 ">
+                                <h5 class="text-start text-uppercase">Family Members Distribution</h5>
+                                <canvas id="familyPieChart" height="180"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
-
 </div>
 
+</div>
+<!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Chart JS Script -->
 <script>
-    if (document.querySelector("#ethernet-chart-01")) {
-        const options = {
-            series: [{
-                name: "Frontend Time",
-                data: [2.1, 2.5, 2.0, 2.3, 2.14, 2.2, 2.15]
-            }],
-            colors: ["#3a57e8"],
-            chart: {
-                height: 60,
-                type: 'line',
-                sparkline: { enabled: true },
-                zoom: { enabled: false },
-                toolbar: { show: false },
-            },
-            dataLabels: { enabled: false },
-            stroke: { curve: 'smooth', width: 3 },
-            legend: { show: false },
-            grid: { show: false },
-            xaxis: { labels: { show: false } },
-            yaxis: { labels: { show: false } }
-        };
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("/chart_data")
+            .then(res => res.json())
+            .then(data => {
+                const ctxBar = document.getElementById("studentsFamilyChart").getContext("2d");
+                const ctxPie = document.getElementById("familyPieChart").getContext("2d");
 
-        var chart = new ApexCharts(document.querySelector("#ethernet-chart-01"), options);
-        chart.render();
+                if (!data.labels.length) {
+                    ctxBar.font = "16px Arial";
+                    ctxBar.fillText("No data available", 100, 80);
+                    ctxPie.font = "16px Arial";
+                    ctxPie.fillText("No data available", 80, 80);
+                    return;
+                }
 
-        // Optional: update color dynamically
-        document.addEventListener('ColorChange', (e) => {
-            chart.updateOptions({ colors: [e.detail.detail1] });
-        });
-    }
-</script>
-
-<script>
-    fetch("/chart_data")
-        .then(res => res.json())
-        .then(data => {
-            const ctx = document.getElementById('semesterChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 5"],
-                    datasets: [{
-                        label: 'Registrations',
-                        data: data.values,
-                        backgroundColor: [
-                            'rgba(108, 117, 125, 0.2)',
-                            'rgba(25, 135, 84, 0.2)',
-                            'rgba(255, 193, 7, 0.2)',
-                            'rgba(13, 202, 240, 0.2)',
-                            'rgba(13, 110, 253, 0.2)',
-                            'rgba(33, 37, 41, 0.2)'
-                        ],
-                        borderColor: '#fff',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Event Registrations by Semester',
-                            font: { size: 20, weight: 'bold' },
-                            color: '#444',
-                            padding: { top: 20, left: 20, bottom: 0 },
-                            align: 'start'
-                        },
-                        legend: {
-                            display: true,
-                            labels: {
-                                color: '#333',
-                                font: { size: 14 }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: '#333',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            cornerRadius: 8,
-                            padding: 10
-                        }
-                    },
-                    layout: {
-                        padding: {
-                            left: 30, // space from chart edge
-                            right: 10,
-                            top: 10,
-                            bottom: 10
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                color: '#444',
-                                font: { size: 14 }
+                // 🎨 Bar Chart — Students + Family Members per Semester
+                new Chart(ctxBar, {
+                    type: "bar",
+                    data: {
+                        labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
+                        datasets: [
+                            {
+                                label: data.legend_students,
+                                data: data.students,
+                                backgroundColor: "rgba(54, 162, 235, 0.6)",
+                                borderColor: "rgba(54, 162, 235, 1)",
+                                borderWidth: 1
                             },
-                            grid: {
-                                color: '#ccc'
+                            {
+                                label: data.legend_family,
+                                data: data.family_members,
+                                backgroundColor: "rgba(255, 99, 132, 0.6)",
+                                borderColor: "rgba(255, 99, 132, 1)",
+                                borderWidth: 1
                             }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: "top" },
+                            tooltip: { enabled: true }
                         },
-                        x: {
-                            ticks: {
-                                color: '#444',
-                                font: { size: 14 }
-                            },
-                            grid: {
-                                display: true
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
                             }
                         }
                     }
-                }
-            });
-        });
+                });
+
+                // 🎨 Pie Chart — Total Family Members per Semester
+                new Chart(ctxPie, {
+                    type: "pie",
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: "Family Members",
+                            data: data.family_members,
+                            backgroundColor: [
+                                "rgba(255, 99, 132, 0.7)",
+                                "rgba(54, 162, 235, 0.7)",
+                                "rgba(255, 206, 86, 0.7)",
+                                "rgba(75, 192, 192, 0.7)",
+                                "rgba(153, 102, 255, 0.7)",
+                                "rgba(255, 159, 64, 0.7)"
+                            ],
+                            borderColor: "#fff",
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: "bottom" },
+                            tooltip: { enabled: true }
+                        }
+                    }
+                });
+            })
+            .catch(err => console.error("Chart load error:", err));
+    });
 </script>
+
 <!-- JS to fetch numbers -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         fetch("/dashboard_data")
             .then(res => res.json())
             .then(data => {
-                document.getElementById('totalStudents').innerText = data.total_students || 0;
                 document.getElementById('paidStudents').innerText = data.paid_not_refunded || 0;
                 document.getElementById('totalAmountCollected').innerText = data.total_amount_collected || 0;
                 document.getElementById('refundedStudents').innerText = data.refunded_count || 0;
